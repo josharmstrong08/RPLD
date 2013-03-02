@@ -41,22 +41,39 @@ function initialize() {
   gpio.open(PIN_B2, 'output', openCallback);
 
   if (opencount != 13) {
-    throw new Error("Not all pins were opened");
+    console.log("Not all pins were initialized, waiting...");
+    setTimeout(function() {
+      if (opencount != 13) {
+        throw new Error("Not all pins were opened");
+      }
+    }, 3000);
   }
 
-  gpio.write(PIN_OE, 0, errCallback);
-  gpio.write(PIN_SCLK, 0, errCallback);
-  gpio.write(PIN_LAT, 0, errCallback);
-  gpio.write(PIN_A, 0, errCallback);
-  gpio.write(PIN_B, 0, errCallback);
-  gpio.write(PIN_C, 0, errCallback);
-  gpio.write(PIN_D, 0, errCallback);
-  gpio.write(PIN_R1, 0, errCallback);
-  gpio.write(PIN_G1, 0, errCallback);
-  gpio.write(PIN_B1, 0, errCallback);
-  gpio.write(PIN_R2, 0, errCallback);
-  gpio.write(PIN_G2, 0, errCallback);
-  gpio.write(PIN_B2, 0, errCallback);
+  opencount = 0;
+  gpio.write(PIN_OE, 1, openCallback);
+  gpio.write(PIN_SCLK, 0, openCallback);
+  gpio.write(PIN_LAT, 0, openCallback);
+  gpio.write(PIN_A, 0, openCallback);
+  gpio.write(PIN_B, 0, openCallback);
+  gpio.write(PIN_C, 0, openCallback);
+  gpio.write(PIN_D, 0, openCallback);
+  gpio.write(PIN_R1, 0, openCallback);
+  gpio.write(PIN_G1, 0, openCallback);
+  gpio.write(PIN_B1, 0, openCallback);
+  gpio.write(PIN_R2, 0, openCallback);
+  gpio.write(PIN_G2, 0, openCallback);
+  gpio.write(PIN_B2, 0, openCallback);
+
+  if (opencount != 13) {
+    console.log("Not all pins were initialized, waiting...");
+    setTimeout(function() {
+      if (opencount != 13) {
+        throw new Error("Not all pins were opened");
+      }
+    }, 3000);
+  }
+
+  console.log("Initialized");
 }
 
 /**
@@ -78,30 +95,26 @@ function clockInData(r1, g1, b1, r2, g2, b2) {
  * Select a row. row must be an integer.
  */
 function selectRow(row) {
-  gpio.write(PIN_A, row & 0x01, errCallback);
-  gpio.write(PIN_B, row & 0x02, errCallback);
-  gpio.write(PIN_C, row & 0x04, errCallback);
-  gpio.write(PIN_D, row & 0x08, errCallback);
+  gpio.write(PIN_A, (row & 0x01) == 0x01, errCallback);
+  gpio.write(PIN_B, (row & 0x02) == 0x02, errCallback);
+  gpio.write(PIN_C, (row & 0x04) == 0x04, errCallback);
+  gpio.write(PIN_D, (row & 0x08) == 0x08, errCallback);
 }
 
 
-var server = http.createServer(function(request, response) {
-    // process HTTP request. Since we're writing just WebSockets server
-    // we don't have to implement anything.
-});
-
 initialize();
-
-gpio.write(PIN_LAT, 0, errCallback);
 
 while (1) {
   for (var row = 0; row < 8; row++) {
     selectRow(row);
+
+    gpio.write(PIN_LAT, 0, errCallback);
 
     for (var i = 0; i < 32; i++) {
       clockInData(1,1,0,0,1,0);
     }
 
     gpio.write(PIN_LAT, 1, errCallback);
+    console.log("Wrote row " + row + ', ' + ((row & 0x01) == 0x01) + ' ' + ((row & 0x02) == 0x02) + ' ' + ((row & 0x04) == 0x04) + ' ' + ((row & 0x08) == 0x08));
   }
 }
