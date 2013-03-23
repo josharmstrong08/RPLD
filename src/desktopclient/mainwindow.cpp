@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "displayconfigwidget.h"
 #include <QMessageBox>
 #include <QColorDialog>
 
@@ -8,6 +9,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    DisplayConfigWidget *displayConfigWidget = new DisplayConfigWidget(this);
+    int configLabelIndex = ui->gridLayout->indexOf(ui->matrixConfigLabel);
+    int row, column, rowspan, columnspan;
+    ui->gridLayout->getItemPosition(configLabelIndex, &row, &column, &rowspan, &columnspan);
+    ui->gridLayout->addWidget(displayConfigWidget, row, column + 1);
 }
 
 MainWindow::~MainWindow()

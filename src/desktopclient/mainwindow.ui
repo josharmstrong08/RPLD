@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>245</height>
+    <width>351</width>
+    <height>358</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,8 +22,8 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1" alignment="Qt::AlignLeft">
-     <widget class="QLabel" name="label_5">
+    <item row="6" column="1" alignment="Qt::AlignLeft|Qt::AlignTop">
+     <widget class="QLabel" name="matrixConfigLabel">
       <property name="text">
        <string>Matrix Configuration:</string>
       </property>
@@ -37,13 +37,22 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
+      <property name="invertedAppearance">
+       <bool>false</bool>
+      </property>
+      <property name="invertedControls">
+       <bool>false</bool>
+      </property>
       <property name="tickPosition">
        <enum>QSlider::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>20</number>
       </property>
      </widget>
     </item>
     <item row="1" column="1" alignment="Qt::AlignLeft">
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="label_1">
       <property name="text">
        <string>Status:</string>
       </property>
@@ -137,7 +146,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>420</width>
+     <width>351</width>
      <height>27</height>
     </rect>
    </property>
