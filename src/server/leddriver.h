@@ -1,15 +1,12 @@
-/**
- *
- */
-
 #ifndef LEDDRIVER_H
 #define LEDDRIVER_H
 
-#include <stdint.h>
+#include <cstdint>
 
-class LEDDriver {
+class LEDDriver
+{
 public:
-  virtual int OutputFrame(uint8_t (**frame)[3], unsigned long width, unsigned long height) =0;
+    virtual int OutputFrame(uint8_t (**frame)[3], unsigned long width, unsigned long height) =0;
 };
 
-#endif
+#endif // LEDDRIVER_H

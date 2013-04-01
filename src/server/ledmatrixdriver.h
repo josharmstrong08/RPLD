@@ -1,17 +1,13 @@
-/**
- *
- */
-
 #ifndef LEDMATRIXDRIVER_H
 #define LEDMATRIXDRIVER_H
 
 #include "leddriver.h"
-#include <stdint.h>
+#include <cstdint>
 
-class LEDMatrixDriver : public LEDDriver {
+class LEDMatrixDriver : public LEDDriver
+{
 public:
-  virtual int OutputFrame(uint8_t (**frame)[3], unsigned long width, unsigned long height);
-
+    int OutputFrame(uint8_t (**frame)[3], unsigned long width, unsigned long height);
 };
 
-#endif
+#endif // LEDMATRIXDRIVER_H
