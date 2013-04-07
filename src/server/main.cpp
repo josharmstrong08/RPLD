@@ -1,4 +1,4 @@
-/*!
+/**
  * The Raspberry Pi server application.
  *
  * This application listens for messages from the desktop client application
@@ -11,17 +11,18 @@
 #include "ledmatrixdriver.h"
 #include "scrollingtextdisplay.h"
 
-/*!
- * \brief The entry point for the application.
- * \param argc The number of command line arguments
- * \param argv The array of command line argument strings.
- * \return The exit status of the application.
+/**
+ * @brief The entry point for the application.
+ * @param argc The number of command line arguments
+ * @param argv The array of command line argument strings.
+ * @return The exit status of the application.
  */
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     
-    ScrollingTextDisplay *display = new ScrollingTextDisplay();
+    LEDMatrixDriver *driver = new LEDMatrixDriver();
+    ScrollingTextDisplay *display = new ScrollingTextDisplay(driver);
     QThread *displayThread = new QThread();
 
     QObject::connect(displayThread, SIGNAL(started()), display, SLOT(start()));
