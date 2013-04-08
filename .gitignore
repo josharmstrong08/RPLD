@@ -23,3 +23,5 @@ Makefile
 html
 latex
 
+# Windows
+Thumbs.db

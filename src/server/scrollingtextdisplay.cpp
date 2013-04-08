@@ -66,5 +66,42 @@ void ScrollingTextDisplay::start()
 void ScrollingTextDisplay::update()
 {
     qDebug() << "Frame output";
-    this->driver->OutputFrame(this->buffer, 32, 32);
+    //this->driver->OutputFrame(this->buffer, 32, 32);
+}
+
+/**
+ * @brief Stop
+ */
+void ScrollingTextDisplay::stop()
+{
+
+}
+
+/**
+ * @brief ScrollingTextDisplay::setText
+ * @param text The text to display.
+ */
+void ScrollingTextDisplay::setText(QString text)
+{
+    this->text = text;
+}
+
+/**
+ * @brief ScrollingTextDisplay::setColor
+ * @param color The new text color. The actual color displayed is dependent
+ *              on the hardware and driver.
+ */
+//void ScrollingTextDisplay::setColor(QColor color)
+//{
+//    this->textColor = color;
+//}
+
+/**
+ * @brief Sets the text scrolling speed.
+ * @param speed The speed to scroll the text at, in pixels per millisecond.
+ *              Values can be positive or negative.
+ */
+void ScrollingTextDisplay::setScrollingSpeed(int speed)
+{
+    this->scrollingSpeed = speed;
 }

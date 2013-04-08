@@ -25,7 +25,7 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication *a = new QCoreApplication(argc, argv);
-    
+
 #ifdef USE_STD_OUT
     LEDTestDriver *driver = new LEDTestDriver();
 #else

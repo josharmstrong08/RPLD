@@ -8,6 +8,7 @@
 
 #include <QObject>
 #include <QTimer>
+//#include <QColor>
 #include <stdint.h>
 #include "leddriver.h"
 
@@ -37,6 +38,15 @@ private slots:
 
 public slots:
     void start();
+    void stop();
+    void setText(QString text);
+    //void setColor(QColor color);
+    void setScrollingSpeed(int speed);
+
+private:
+    QString text;
+    //QColor textColor;
+    int scrollingSpeed;
 };
 
 #endif // SCROLLINGTEXTDISPLAY_H
