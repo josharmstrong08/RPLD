@@ -1,4 +1,4 @@
-/*!
+/**
  * Definition of the LEDDriver abstract base class. This class defines an interface
  * for displaying an image on any LED display.
  */
@@ -8,8 +8,8 @@
 
 #include <cstdint>
 
-/*!
- * \brief The LEDDriver class
+/**
+ * @brief The LEDDriver class
  */
 class LEDDriver
 {

@@ -17,11 +17,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     ledmatrixdriver.cpp \
-    scrollingtextdisplay.cpp
+    scrollingtextdisplay.cpp \
+    ledtestdriver.cpp
 
 HEADERS += \
     leddriver.h \
     ledmatrixdriver.h \
-    scrollingtextdisplay.h
+    scrollingtextdisplay.h \
+    ledtestdriver.h
 
 QMAKE_CXXFLAGS += -std=c++0x
+
+DEFINES += USE_STD_OUT
