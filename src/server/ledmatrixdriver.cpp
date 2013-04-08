@@ -16,7 +16,7 @@
  * @param height The height of the output frame.
  * @return If an error occured it returns a nonzero integer, otherwise it returns 0.
  */
-int LEDMatrixDriver::OutputFrame(uint8_t (**frame)[3], unsigned long width, unsigned long height)
+int LEDMatrixDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned long height)
 {
     std::cout << "Output Frame" << std::endl;
 

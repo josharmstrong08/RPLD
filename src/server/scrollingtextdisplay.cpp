@@ -7,6 +7,7 @@
 #include <QThread>
 #include <QDebug>
 #include <stdint.h>
+#include <iostream>
 
 
 /**
@@ -24,17 +25,37 @@ ScrollingTextDisplay::ScrollingTextDisplay(LEDDriver *driver, unsigned long widt
     this->driver = driver;
     this->width = width;
     this->height = height;
+    this->buffer = new uint8_t [width * height * 3];
 
-    //this->buffer = (uint8_t(**)[3])malloc(sizeof(uint8_t) * 32 * 32 * 3);
-    this->buffer = new uint8_t** [32];
-    for (int i = 0; i < 32; i++) {
-        this->buffer[i] = new uint8_t*[32];
-        for (int j = 0; j < 3; j++) {
-            this->buffer[i][j] = new uint8_t[3];
-            this->buffer[i][j][0] = 0;
-            this->buffer[i][j][1] = 1;
-            this->buffer[i][j][2] = 2;
+    // Testing accessing a single character
+    // The offset into the bitmap array of the character
+    uint16_t charOffset = this->fontInfo.charInfo['A' - this->fontInfo.startChar].offset;
+    // The width of the character in bits (in other words, how many pixels wide it is).
+    int bitmapWidth = this->fontInfo.charInfo['A' - this->fontInfo.startChar].widthBits;
+
+    int xPageCount, yPageCount;
+    if (bitmapWidth % 8 == 0) {
+        xPageCount = bitmapWidth / 8;
+    } else {
+        xPageCount = (bitmapWidth / 8) + 1;
+    }
+    yPageCount = this->fontInfo.heightPages * 8;
+
+    for (int y = 0; y < yPageCount; y++) {
+        for (int x = 0; x < xPageCount; x++) {
+            // Output a byte
+            uint8_t byte = this->fontInfo.data[charOffset + y * xPageCount + x];
+            //std::cout << byte;
+            for (int z = 0; z < 8; z++) {
+                if ((byte & 0x80) == 0x80) {
+                    std::cout << "#";
+                } else {
+                    std::cout << " ";
+                }
+                byte <<= 1;
+            }
         }
+        std::cout << "\n";
     }
 }
 
@@ -57,7 +78,7 @@ void ScrollingTextDisplay::start()
     qDebug() << "Scrolling text display started (thread " << QThread::currentThreadId() << ")";
     this->timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    this->timer->start(33);
+    //this->timer->start(33);
 }
 
 /**

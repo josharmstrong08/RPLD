@@ -28,7 +28,7 @@ private:
     unsigned long width;
     unsigned long height;
     QTimer *timer;
-    uint8_t ***buffer;
+    uint8_t *buffer;
 
 signals:
     void finished();
@@ -47,6 +47,28 @@ private:
     QString text;
     //QColor textColor;
     int scrollingSpeed;
+
+    // This structure describes a single character's display information
+    typedef struct
+    {
+        const uint8_t widthBits;                // width, in bits (or pixels), of the character
+        const uint16_t offset;					// offset of the character's bitmap, in bytes, into the the FONT_INFO's data array
+
+    } FONT_CHAR_INFO;
+
+    // Describes a single font
+    typedef struct
+    {
+        const uint8_t 			heightPages;	// height, in pages (8 pixels), of the font's characters
+        const uint8_t 			startChar;		// the first character in the font (e.g. in charInfo and data)
+        const uint8_t 			endChar;		// the last character in the font
+        const FONT_CHAR_INFO*	charInfo;		// pointer to array of char information
+        const uint8_t*			data;			// pointer to generated array of character visual representation
+    } FONT_INFO;
+
+    static const uint8_t fontBitmaps[];
+    static const FONT_INFO fontInfo;
+    static const FONT_CHAR_INFO fontCharInfo[];
 };
 
 #endif // SCROLLINGTEXTDISPLAY_H

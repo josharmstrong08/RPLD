@@ -18,7 +18,8 @@ TEMPLATE = app
 SOURCES += main.cpp \
     ledmatrixdriver.cpp \
     scrollingtextdisplay.cpp \
-    ledtestdriver.cpp
+    ledtestdriver.cpp \
+    font.cpp
 
 HEADERS += \
     leddriver.h \
