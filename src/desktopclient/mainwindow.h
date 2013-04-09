@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <stdio.h>
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,14 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionContents_triggered();
     void on_colorButton_clicked();
+
+    void on_uploadButton_clicked();
+
+    void on_shutdownButton_clicked();
+
+    void on_textEdit_returnPressed();
+
+    void on_scrollSpeedSlider_sliderMoved(int position);
 
 private:
     Ui::MainWindow *ui;
