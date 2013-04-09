@@ -34,7 +34,7 @@ public slots:
     void start();
     void stop();
     void setText(QString text);
-    //void setColor(QColor color);
+    void setColor(unsigned short red, unsigned short green, unsigned short blue);
     /**
      * @brief Sets the scrolling speed.
      * @param speed The speed in pixels per second.
@@ -51,7 +51,9 @@ private:
     QTimer *timer;
     uint8_t *buffer;
     QString text;
-    //QColor textColor;
+    unsigned short colorRed;
+    unsigned short colorGreen;
+    unsigned short colorBlue;
     int scrollingSpeed;
     double currentOffset;
     int maxOffset;

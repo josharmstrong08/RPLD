@@ -74,15 +74,15 @@ void ScrollingTextDisplay::update()
     }
 
     // Create the next frame for next update -----------------------------
-    for (int i = 0; i < this->width * this->height * 3; i++) {
+    for (unsigned long i = 0; i < this->width * this->height * 3; i++) {
         this->buffer[i] = 0x00;
     }
 
     int tempOffset = this->currentOffset;
     for (int i = 0; i < this->text.length(); i++) {
         int bitmapWidth = this->fontInfo.charInfo[this->text[i].toLatin1() - this->fontInfo.startChar].widthBits;
-        tempOffset += bitmapWidth + 5;
         this->writeCharacter(this->text[i], tempOffset);
+        tempOffset += bitmapWidth + 5;
     }
 }
 
@@ -126,12 +126,12 @@ void ScrollingTextDisplay::writeCharacter(QChar character, int offset)
 
             for (int z = 0; z < 8; z++) {
                 int x = xByte * 8 + z;
-                if (x + offset >= 0 || x + offset < (signed long long)this->width) {
+                if (x + offset >= 0 && x + offset < (signed long long)this->width) {
                     int index = this->calculateBufferOffset(x + offset, y);
                     if ((byte & 0x80) == 0x80) {
-                        this->buffer[index + 0] = 0xff;
-                        this->buffer[index + 1] = 0xff;
-                        this->buffer[index + 2] = 0xff;
+                        this->buffer[index + 0] = this->colorRed;
+                        this->buffer[index + 1] = this->colorGreen;
+                        this->buffer[index + 2] = this->colorBlue;
                     }
                 }
 
@@ -172,7 +172,11 @@ void ScrollingTextDisplay::stop()
 void ScrollingTextDisplay::setText(QString text)
 {
     this->text = text;
-    this->maxOffset = -(text.length() * 13);
+    this->maxOffset = 0;
+    for (int i = 0; i < text.length(); i++) {
+        this->maxOffset -= this->fontInfo.charInfo[text[i].toLatin1() - this->fontInfo.startChar].widthBits + 5;
+    }
+    this->currentOffset = this->width;
 }
 
 /**
@@ -180,10 +184,12 @@ void ScrollingTextDisplay::setText(QString text)
  * @param color The new text color. The actual color displayed is dependent
  *              on the hardware and driver.
  */
-//void ScrollingTextDisplay::setColor(QColor color)
-//{
-//    this->textColor = color;
-//}
+void ScrollingTextDisplay::setColor(unsigned short red, unsigned short green, unsigned short blue)
+{
+    this->colorRed = red;
+    this->colorGreen = green;
+    this->colorBlue = blue;
+}
 
 /**
  * @brief Sets the text scrolling speed.

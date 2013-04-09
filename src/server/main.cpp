@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     QCoreApplication *a = new QCoreApplication(argc, argv);
 
 #ifdef USE_STD_OUT
+    // Setup the scrolling text display with the test stdout driver.
     LEDTestDriver *driver = new LEDTestDriver();
 #else
     // Set up the scrolling text display with the led matrix driver.
@@ -37,8 +38,8 @@ int main(int argc, char *argv[])
     driver->SetMatrixConfig(matrixconfig, 1, 1);
 #endif
     ScrollingTextDisplay *display = new ScrollingTextDisplay(driver, 32, 32);
-    display->setText("Hello, World!");
-    display->setScrollingSpeed(10);
+    display->setText("Hello world! 1234567890 ~!@#$%^&*()_+[]{};:'\",<.>/?\\|");
+    display->setScrollingSpeed(30);
 
     // Create the display thread
     QThread *displayThread = new QThread();
@@ -53,12 +54,10 @@ int main(int argc, char *argv[])
     QObject::connect(displayThread, SIGNAL(finished()), a, SLOT(quit()));
     // Push the display onto the display thread
     display->moveToThread(displayThread);
-    qDebug() << "Starting a new thread from the main thread (thread " << QThread::currentThreadId() << ")";
     // Start the thread
     displayThread->start();
-    qDebug() << "Started the thread";
+
     displayThread->wait();
-    qDebug() << "Joined the thread";
 
     return 0;
 }

@@ -3,10 +3,11 @@
 #include <iostream>
 
 /**
- * @brief LEDTestDriver::OutputFrame
- * @param width
- * @param height
- * @return
+ * @brief Writes a frame to stdout, after print 80 new lines to clear the screen.
+ * @param frame The frame in row-major order with three bytes per pixel.
+ * @param width The width of the frame
+ * @param height the height of the frame
+ * @return Always returns 0 for success.
  */
 int LEDTestDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned long height)
 {
@@ -14,19 +15,31 @@ int LEDTestDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned lon
         std::cout << std::endl;
     }
 
-    for (unsigned long y = 0; y < 32; y++){
-        for (unsigned long x = 0; x < 32; x++) {
-            if (frame[y * (width * 3) + x * 3 + 0] == 0xff &&
-                frame[y * (width * 3) + x * 3 + 1] == 0xff &&
-                frame[y * (width * 3) + x * 3 + 2] == 0xff) {
-            //if (frame[y * (width * 3) + x] == 0xff) {
+    std::cout << "+";
+    for (unsigned long x = 0; x < width; x++) {
+        std::cout << "-";
+    }
+    std::cout << "+" << std::endl;
+
+    for (unsigned long y = 0; y < height; y++){
+        std::cout << "|";
+        for (unsigned long x = 0; x < width; x++) {
+            if (frame[y * (width * 3) + x * 3 + 0] > 0x00 ||
+                frame[y * (width * 3) + x * 3 + 1] > 0x00 ||
+                frame[y * (width * 3) + x * 3 + 2] > 0x00) {
                 std::cout << "#";
             } else {
                 std::cout << " ";
             }
         }
-        std::cout << std::endl;
+        std::cout << "|" << std::endl;
     }
+
+    std::cout << "+";
+    for (unsigned long x = 0; x < width; x++) {
+        std::cout << "-";
+    }
+    std::cout << "+" << std::endl;
 
     return 0;
 }
