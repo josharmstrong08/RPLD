@@ -8,7 +8,6 @@
 
 #include <QObject>
 #include <QTimer>
-//#include <QColor>
 #include <stdint.h>
 #include "leddriver.h"
 

@@ -30,3 +30,10 @@ HEADERS += \
 QMAKE_CXXFLAGS += -std=c++0x
 
 DEFINES += USE_STD_OUT
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-RPLDCommunications-Desktop_Qt_4_8_4_in_PATH_System-Debug/release/ -lRPLDCommunications
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-RPLDCommunications-Desktop_Qt_4_8_4_in_PATH_System-Debug/debug/ -lRPLDCommunications
+else:unix:!macx: LIBS += -L$$PWD/../build-RPLDCommunications-Desktop_Qt_4_8_4_in_PATH_System-Debug/ -lRPLDCommunications
+
+INCLUDEPATH += $$PWD/../build-RPLDCommunications-Desktop_Qt_4_8_4_in_PATH_System-Debug
+DEPENDPATH += $$PWD/../build-RPLDCommunications-Desktop_Qt_4_8_4_in_PATH_System-Debug

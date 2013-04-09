@@ -25,14 +25,11 @@ ScrollingTextDisplay::ScrollingTextDisplay(LEDDriver *driver, unsigned long widt
     this->driver = driver;
     this->width = width;
     this->height = height;
-    this->buffer = new uint8_t [width * height * 3];
+    this->buffer = new uint8_t [width * height * 3]();
     this->currentOffset = 0;
     this->maxOffset = this->width;
     this->text = "";
     this->scrollingSpeed = 0;
-
-    //this->writeCharacter('c', -10);
-    //this->driver->OutputFrame(this->buffer, this->width, this->height);
 }
 
 /**
@@ -47,11 +44,10 @@ ScrollingTextDisplay::~ScrollingTextDisplay()
  * @brief Starts displaying the scrolling text.
  *
  * This function cause frames to start updating. Control is immediately
- * returned.
+ * returned. This function is meant to be entry point of a new thread.
  */
 void ScrollingTextDisplay::start()
 {
-    qDebug() << "Scrolling text display started (thread " << QThread::currentThreadId() << ")";
     this->timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     this->timer->start(33);
@@ -158,15 +154,21 @@ int ScrollingTextDisplay::calculateBufferOffset(unsigned long x, unsigned long y
 }
 
 /**
- * @brief Stop
+ * @brief Stop displaying.
  */
 void ScrollingTextDisplay::stop()
 {
+    this->timer->stop();
 
+    for (unsigned long i = 0; i < this->width * this->height * 3; i++) {
+        this->buffer[i] = 0x00;
+    }
+
+    this->driver->OutputFrame(this->buffer, width, height);
 }
 
 /**
- * @brief ScrollingTextDisplay::setText
+ * @brief Sets the text to display
  * @param text The text to display.
  */
 void ScrollingTextDisplay::setText(QString text)
@@ -180,7 +182,7 @@ void ScrollingTextDisplay::setText(QString text)
 }
 
 /**
- * @brief ScrollingTextDisplay::setColor
+ * @brief Sets the color of the scrolling text.
  * @param color The new text color. The actual color displayed is dependent
  *              on the hardware and driver.
  */

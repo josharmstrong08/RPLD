@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QGridLayout>
 
 
 class DisplayConfigWidget : public QWidget
@@ -13,9 +14,14 @@ public:
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent * event);
 
 private:
     QLabel *currentlyDraggingLabel;
+    QGridLayout *gridLayout;
+    QVector<QLabel*> labels;
 
 signals:
     
