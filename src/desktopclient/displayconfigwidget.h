@@ -22,6 +22,7 @@ private:
     QLabel *currentlyDraggingLabel;
     QGridLayout *gridLayout;
     QVector<QLabel*> labels;
+    QPoint dragOffset;
 
 signals:
     
