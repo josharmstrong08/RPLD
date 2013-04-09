@@ -24,29 +24,37 @@ public:
     ~ScrollingTextDisplay();
 
 private:
-    LEDDriver *driver;
-    unsigned long width;
-    unsigned long height;
-    QTimer *timer;
-    uint8_t *buffer;
+    void writeCharacter(QChar character, int offset);
+    int calculateBufferOffset(unsigned long x, unsigned long y);
 
 signals:
     void finished();
     
-private slots:
-    void update();
-
 public slots:
     void start();
     void stop();
     void setText(QString text);
     //void setColor(QColor color);
+    /**
+     * @brief Sets the scrolling speed.
+     * @param speed The speed in pixels per second.
+     */
     void setScrollingSpeed(int speed);
 
+private slots:
+    void update();
+
 private:
+    LEDDriver *driver;
+    unsigned long width;
+    unsigned long height;
+    QTimer *timer;
+    uint8_t *buffer;
     QString text;
     //QColor textColor;
     int scrollingSpeed;
+    double currentOffset;
+    int maxOffset;
 
     // This structure describes a single character's display information
     typedef struct

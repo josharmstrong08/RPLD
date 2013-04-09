@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
     driver->SetMatrixConfig(matrixconfig, 1, 1);
 #endif
     ScrollingTextDisplay *display = new ScrollingTextDisplay(driver, 32, 32);
+    display->setText("Hello, World!");
+    display->setScrollingSpeed(10);
 
     // Create the display thread
     QThread *displayThread = new QThread();

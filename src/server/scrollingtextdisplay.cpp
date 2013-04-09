@@ -8,7 +8,7 @@
 #include <QDebug>
 #include <stdint.h>
 #include <iostream>
-
+#include <cassert>
 
 /**
  * @brief Initializes a new instance of the ScrollingTextDisplay class.
@@ -26,37 +26,13 @@ ScrollingTextDisplay::ScrollingTextDisplay(LEDDriver *driver, unsigned long widt
     this->width = width;
     this->height = height;
     this->buffer = new uint8_t [width * height * 3];
+    this->currentOffset = 0;
+    this->maxOffset = this->width;
+    this->text = "";
+    this->scrollingSpeed = 0;
 
-    // Testing accessing a single character
-    // The offset into the bitmap array of the character
-    uint16_t charOffset = this->fontInfo.charInfo['A' - this->fontInfo.startChar].offset;
-    // The width of the character in bits (in other words, how many pixels wide it is).
-    int bitmapWidth = this->fontInfo.charInfo['A' - this->fontInfo.startChar].widthBits;
-
-    int xPageCount, yPageCount;
-    if (bitmapWidth % 8 == 0) {
-        xPageCount = bitmapWidth / 8;
-    } else {
-        xPageCount = (bitmapWidth / 8) + 1;
-    }
-    yPageCount = this->fontInfo.heightPages * 8;
-
-    for (int y = 0; y < yPageCount; y++) {
-        for (int x = 0; x < xPageCount; x++) {
-            // Output a byte
-            uint8_t byte = this->fontInfo.data[charOffset + y * xPageCount + x];
-            //std::cout << byte;
-            for (int z = 0; z < 8; z++) {
-                if ((byte & 0x80) == 0x80) {
-                    std::cout << "#";
-                } else {
-                    std::cout << " ";
-                }
-                byte <<= 1;
-            }
-        }
-        std::cout << "\n";
-    }
+    //this->writeCharacter('c', -10);
+    //this->driver->OutputFrame(this->buffer, this->width, this->height);
 }
 
 /**
@@ -78,16 +54,107 @@ void ScrollingTextDisplay::start()
     qDebug() << "Scrolling text display started (thread " << QThread::currentThreadId() << ")";
     this->timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    //this->timer->start(33);
+    this->timer->start(33);
 }
 
 /**
- * @brief Outputs a frame and calculates the next frame.
+ * @brief Outputs a frame and calculates the next frame. This frame is expected to be called
+ *   once every 33 milliseconds (30 times per second).
  */
 void ScrollingTextDisplay::update()
 {
-    qDebug() << "Frame output";
-    //this->driver->OutputFrame(this->buffer, 32, 32);
+    // Display the frame--------------------------------------------------
+    this->driver->OutputFrame(this->buffer, 32, 32);
+
+    // Scroll ------------------------------------------------------------
+    // TODO Adjust with scrolling speed here
+    this->currentOffset -= 33 / 1000.0 * (double)this->scrollingSpeed;
+    if (this->currentOffset <= this->maxOffset) {
+        this->currentOffset = this->width;
+    }
+
+    // Create the next frame for next update -----------------------------
+    for (int i = 0; i < this->width * this->height * 3; i++) {
+        this->buffer[i] = 0x00;
+    }
+
+    int tempOffset = this->currentOffset;
+    for (int i = 0; i < this->text.length(); i++) {
+        int bitmapWidth = this->fontInfo.charInfo[this->text[i].toLatin1() - this->fontInfo.startChar].widthBits;
+        tempOffset += bitmapWidth + 5;
+        this->writeCharacter(this->text[i], tempOffset);
+    }
+}
+
+/**
+ * @brief Writes a character to the buffer at the specified offset.
+ *
+ * This function assumes that the buffer has been cleared already. It will only
+ * write within the bounds of the buffer. It uses the currently set color to
+ * draw the character. The offset is the number of pixels from the left side
+ * of the frame to start drawing. It will always start drawing at the top of the
+ * frame.
+ *
+ * @param character The character to write out.
+ * @param offset The offset from the left hand side to write at.
+ */
+void ScrollingTextDisplay::writeCharacter(QChar character, int offset)
+{
+    // The offset into the bitmap array of the character
+    uint16_t charOffset = this->fontInfo.charInfo[character.toLatin1() - this->fontInfo.startChar].offset;
+    // The width of the character in bits (in other words, how many pixels wide it is).
+    int bitmapWidth = this->fontInfo.charInfo[character.toLatin1() - this->fontInfo.startChar].widthBits;
+
+    // Get the number of bytes that the character uses, based on the width in pixels of the
+    // character.
+    int xByteCount;
+    if (bitmapWidth % 8 == 0) {
+        xByteCount = bitmapWidth / 8;
+    } else {
+        xByteCount = (bitmapWidth / 8) + 1;
+    }
+
+    // Set the max y value to the the height of the character in pixels,
+    // or the height of the display, whichever is smaller.
+    int yMax = qMin((unsigned long)(this->fontInfo.heightPages * 8), this->height);
+
+    // Write the character to the buffer
+    for (int y = 0; y < yMax; y++) {
+        for (int xByte = 0; xByte < xByteCount; xByte++) {
+            // Get a byte
+            uint8_t byte = this->fontInfo.data[charOffset + y * xByteCount + xByte];
+
+            for (int z = 0; z < 8; z++) {
+                int x = xByte * 8 + z;
+                if (x + offset >= 0 || x + offset < (signed long long)this->width) {
+                    int index = this->calculateBufferOffset(x + offset, y);
+                    if ((byte & 0x80) == 0x80) {
+                        this->buffer[index + 0] = 0xff;
+                        this->buffer[index + 1] = 0xff;
+                        this->buffer[index + 2] = 0xff;
+                    }
+                }
+
+                byte <<= 1;
+            }
+        }
+    }
+}
+
+/**
+ * @brief Calculates the index into the buffer of the given pixel at (x,y). The
+ *   buffer is row-major order with each pixel taking three items (a byte) in the
+ *   array.
+ * @param x The x position of the pixel
+ * @param y The y position of the pixel
+ * @return A valid index into this->buffer.
+ */
+int ScrollingTextDisplay::calculateBufferOffset(unsigned long x, unsigned long y)
+{
+    assert(x < this->width);
+    assert(y < this->height);
+
+    return y * this->width * 3 + x * 3;
 }
 
 /**
@@ -105,6 +172,7 @@ void ScrollingTextDisplay::stop()
 void ScrollingTextDisplay::setText(QString text)
 {
     this->text = text;
+    this->maxOffset = -(text.length() * 13);
 }
 
 /**
