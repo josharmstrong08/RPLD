@@ -44,11 +44,16 @@ void MainWindow::on_colorButton_clicked()
 }
 
 void MainWindow::on_uploadButton_clicked()
-{
+{   
     // This will upload the contents to the server
     // Need to create a class to send the data in over serialization.
+    QString finaltext;
+    int scrollspeed;
     printf("upload pressed\n");
     fflush(stdout);
+    finaltext = this->ui->textEdit->text();
+   // qDebug() << this->ui->scrollSpeedSlider->value;
+
 }
 
 void MainWindow::on_shutdownButton_clicked()
@@ -56,20 +61,5 @@ void MainWindow::on_shutdownButton_clicked()
     // Sends a shutdown signal to the Pi to turn it off.
     // Will either send
     printf("shutdown pressed\n");
-     fflush(stdout);
-}
-
-void MainWindow::on_textEdit_returnPressed()
-{
-    // Will lock in the text and maybe upload the content?
-    printf("Text entered\n");
-     fflush(stdout);
-}
-
-void MainWindow::on_scrollSpeedSlider_sliderMoved(int position)
-{
-    // This will trigger when the slider is moved, force update the scroll speed.
-    // Will forcefull update the scroll speed
-    printf("slider moved to %d\n", position);
      fflush(stdout);
 }

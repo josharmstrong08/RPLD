@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <stdio.h>
+#include <QString>
+#include <QDebug>
 
 namespace Ui {
 class MainWindow;
@@ -26,9 +28,6 @@ private slots:
 
     void on_shutdownButton_clicked();
 
-    void on_textEdit_returnPressed();
-
-    void on_scrollSpeedSlider_sliderMoved(int position);
 
 private:
     Ui::MainWindow *ui;
