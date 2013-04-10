@@ -4,9 +4,12 @@
 #include "rpldcommunications.h"
 #include <QMessageBox>
 #include <QColorDialog>
+
 #include <cstdio>
+#include <QAbstractSlider>
 
 
+QColor finalColor (0,0,0,0);
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -42,7 +45,9 @@ void MainWindow::on_actionContents_triggered()
 
 void MainWindow::on_colorButton_clicked()
 {
-    QColorDialog::getColor(Qt::white, this, "Select Text Color");
+    finalColor = QColorDialog::getColor(Qt::white, this, "Select Text Color");
+    QString qss = QString("background-color: %1").arg(finalColor.name());
+    this->ui->colorButton->setStyleSheet(qss);
 }
 
 void MainWindow::on_uploadButton_clicked()
@@ -50,11 +55,13 @@ void MainWindow::on_uploadButton_clicked()
     // This will upload the contents to the server
     // Need to create a class to send the data in over serialization.
     QString finaltext;
-    int scrollspeed;
+   // int scrollspeed;
     printf("upload pressed\n");
     fflush(stdout);
-    finaltext = this->ui->textEdit->text();
-   // qDebug() << this->ui->scrollSpeedSlider->value;
+    qDebug() << this->ui->textEdit->text(); // Text of the line
+    qDebug() << this->ui->scrollSpeedSlider->value();
+    qDebug() << finalColor;
+
 
 }
 
