@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     this->communications.connect();
 
+    ui->setupUi(this);
+
     DisplayConfigWidget *displayConfigWidget = new DisplayConfigWidget(this);
     int configLabelIndex = ui->gridLayout->indexOf(ui->matrixConfigLabel);
     int row, column, rowspan, columnspan;
