@@ -10,7 +10,7 @@
 #include <QAbstractSlider>
 
 
-QColor finalColor (0,0,0,0);
+QColor finalColor (Qt::white);
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     int row, column, rowspan, columnspan;
     ui->gridLayout->getItemPosition(configLabelIndex, &row, &column, &rowspan, &columnspan);
     ui->gridLayout->addWidget(displayConfigWidget, row, column + 1);
+    this->ui->colorButton->setStyleSheet("background-color: white");
 }
 
 MainWindow::~MainWindow()
