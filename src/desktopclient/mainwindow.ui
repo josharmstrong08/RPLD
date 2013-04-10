@@ -31,6 +31,12 @@
     </item>
     <item row="4" column="2" colspan="2">
      <widget class="QSlider" name="scrollSpeedSlider">
+      <property name="maximum">
+       <number>200</number>
+      </property>
+      <property name="pageStep">
+       <number>10</number>
+      </property>
       <property name="sliderPosition">
        <number>30</number>
       </property>
@@ -47,7 +53,7 @@
        <enum>QSlider::TicksBelow</enum>
       </property>
       <property name="tickInterval">
-       <number>20</number>
+       <number>10</number>
       </property>
      </widget>
     </item>
