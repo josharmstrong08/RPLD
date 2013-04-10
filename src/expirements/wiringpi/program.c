@@ -2,51 +2,51 @@
 #include <stdio.h>
 #include <wiringPi.h>
 
-int oe = 9;
-int sclk = 8;
-int lat = 14;
-int a = 10;
-int b = 11;
-int c = 12;
-int d = 13;
-int r1 = 2;
-int g1 = 3;
-int b1 = 4;
+int OE = 9;
+int SCLK = 8;
+int LAT = 14;
+int A = 10;
+int B = 11;
+int C = 12;
+int D = 13;
+int R1 = 2;
+int G2 = 3;
+int B2 = 4;
 int r2 = 5;
 int g2 = 6;
 int b2 = 7;
 
 void setup() {
-  pinMode(oe, OUTPUT);
-  pinMode(sclk, OUTPUT);
-  pinMode(lat, OUTPUT);
-  pinMode(a, OUTPUT);
-  pinMode(b, OUTPUT);
-  pinMode(c, OUTPUT);
-  pinMode(d, OUTPUT);
+  pinMode(OE, OUTPUT);
+  pinMode(SCLK, OUTPUT);
+  pinMode(LAT, OUTPUT);
+  pinMode(A, OUTPUT);
+  pinMode(B, OUTPUT);
+  pinMode(C, OUTPUT);
+  pinMode(D, OUTPUT);
   
-  pinMode(r1, OUTPUT);
+  pinMode(R1, OUTPUT);
   pinMode(r2, OUTPUT);
-  pinMode(g1, OUTPUT);
+  pinMode(G2, OUTPUT);
   pinMode(g2, OUTPUT);
-  pinMode(b1, OUTPUT);
+  pinMode(B2, OUTPUT);
   pinMode(b2, OUTPUT);
   
-  digitalWrite(sclk, LOW);
-  digitalWrite(lat, LOW);
-  digitalWrite(oe, HIGH);
-  digitalWrite(a, LOW);
-  digitalWrite(b, LOW);
-  digitalWrite(c, LOW);
-  digitalWrite(d, LOW);
-  digitalWrite(r1, LOW);
+  digitalWrite(SCLK, LOW);
+  digitalWrite(LAT, LOW);
+  digitalWrite(OE, HIGH);
+  digitalWrite(A, LOW);
+  digitalWrite(B, LOW);
+  digitalWrite(C, LOW);
+  digitalWrite(D, LOW);
+  digitalWrite(R1, LOW);
   digitalWrite(r2, LOW);
-  digitalWrite(g1, LOW);
+  digitalWrite(G2, LOW);
   digitalWrite(g2, LOW);
-  digitalWrite(b1, LOW);
+  digitalWrite(B2, LOW);
   digitalWrite(b2, LOW);
   //---------------------------
-  digitalWrite(oe, LOW);
+  digitalWrite(OE, LOW);
 }
 
 int counter = 0;
@@ -56,31 +56,31 @@ void clockInData() {
   int column;
   for (column = 0; column < 32; column++) {
     if (column < seperator) {
-      digitalWrite(r1, HIGH);
+      digitalWrite(R1, HIGH);
       digitalWrite(r2, LOW);
-      digitalWrite(g1, LOW);
+      digitalWrite(G2, LOW);
       digitalWrite(g2, HIGH);
-      digitalWrite(b1, LOW);
+      digitalWrite(B2, LOW);
       digitalWrite(b2, LOW);
     } else {
-      digitalWrite(r1, LOW);
+      digitalWrite(R1, LOW);
       digitalWrite(r2, HIGH);
-      digitalWrite(g1, LOW);
+      digitalWrite(G2, LOW);
       digitalWrite(g2, HIGH);
-      digitalWrite(b1, HIGH);
+      digitalWrite(B2, HIGH);
       digitalWrite(b2, HIGH);
     }
 
-    digitalWrite(sclk, LOW);
-    digitalWrite(sclk, HIGH);
+    digitalWrite(SCLK, LOW);
+    digitalWrite(SCLK, HIGH);
   }
 }
 
 void selectRow(unsigned int row) {
-  digitalWrite(a, row & 0x01);
-  digitalWrite(b, row & 0x02);
-  digitalWrite(c, row & 0x04);
-  digitalWrite(d, row & 0x08);
+  digitalWrite(A, row & 0x01);
+  digitalWrite(B, row & 0x02);
+  digitalWrite(C, row & 0x04);
+  digitalWrite(D, row & 0x08);
 }
 
 void loop() {
@@ -98,7 +98,7 @@ void loop() {
     // disable output
     //digitalWrite(oe, HIGH);
     // latch data load in previous cycle
-    digitalWrite(lat, HIGH);
+    digitalWrite(LAT, HIGH);
 
     // select the row
     selectRow(row);
@@ -106,7 +106,7 @@ void loop() {
     // renable output
     //digitalWrite(oe, LOW);
     // unlatch
-    digitalWrite(lat, LOW);
+    digitalWrite(LAT, LOW);
 
     clockInData();
     delayMicroseconds(1000);

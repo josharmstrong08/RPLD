@@ -3,7 +3,61 @@
  */
 
 #include "ledmatrixdriver.h"
-#include <iostream>
+//#include <wiringPi.h>
+
+#define OE      15;
+#define SCLK    16;
+#define LAT     0;
+#define A       4;
+#define B       12;
+#define C       1;
+#define D       3;
+#define R1      11;
+#define G1      14;
+#define B1      6;
+#define R2      10;
+#define G2      13;
+#define B2      5;
+
+/**
+ * @brief LEDMatrixDriver::LEDMatrixDriver
+ */
+LEDMatrixDriver::LEDMatrixDriver()
+{
+    /*
+    wiringPiSetup();
+
+    pinMode(OE, OUTPUT);
+    pinMode(SCLK, OUTPUT);
+    pinMode(LAT, OUTPUT);
+    pinMode(A, OUTPUT);
+    pinMode(B, OUTPUT);
+    pinMode(C, OUTPUT);
+    pinMode(D, OUTPUT);
+
+    pinMode(R1, OUTPUT);
+    pinMode(G1, OUTPUT);
+    pinMode(B1, OUTPUT);
+    pinMode(R2, OUTPUT);
+    pinMode(G2, OUTPUT);
+    pinMode(B2, OUTPUT);
+
+    digitalWrite(SCLK, LOW);
+    digitalWrite(LAT, LOW);
+    digitalWrite(OE, HIGH);
+    digitalWrite(A, LOW);
+    digitalWrite(B, LOW);
+    digitalWrite(C, LOW);
+    digitalWrite(D, LOW);
+    digitalWrite(R1, LOW);
+    digitalWrite(r2, LOW);
+    digitalWrite(G2, LOW);
+    digitalWrite(g2, LOW);
+    digitalWrite(B2, LOW);
+    digitalWrite(b2, LOW);
+    digitalWrite(OE, LOW);
+*/
+}
 
 /**
  * @brief Implementation of the OutputFrame function for the 32x32 LED Matrices available
@@ -18,7 +72,6 @@
  */
 int LEDMatrixDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned long height)
 {
-    std::cout << "Output Frame" << std::endl;
 
     return 0;
 }

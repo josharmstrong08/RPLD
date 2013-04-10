@@ -15,6 +15,7 @@
 class LEDMatrixDriver : public LEDDriver
 {
 public:
+    explicit LEDMatrixDriver();
     int OutputFrame(uint8_t *frame, unsigned long width, unsigned long height);
     void SetMatrixConfig(int **config, unsigned int width, unsigned int height);
 };

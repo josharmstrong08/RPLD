@@ -89,6 +89,7 @@ void DisplayConfigWidget::mouseReleaseEvent(QMouseEvent *event)
     int leftmargin, topmargin, rightmargin, bottommargin;
     this->gridLayout->getContentsMargins(&leftmargin, &topmargin, &rightmargin, &bottommargin);
     int col = (event->x() - leftmargin) % (32 + this->gridLayout->spacing());
+    //qDebug() << "Mouse x:" << event->x() << ", leftmargin: " << leftmargin << ", spacing: " << this->gridLayout->setParent();
     this->gridLayout->addWidget(this->currentlyDraggingLabel, 0, col);
     this->currentlyDraggingLabel = NULL;
 }

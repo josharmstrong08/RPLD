@@ -15,6 +15,7 @@
 #include "ledmatrixdriver.h"
 #endif
 #include "scrollingtextdisplay.h"
+#include "rpldcommunications.h"
 
 /**
  * @brief The entry point for the application.
@@ -37,9 +38,13 @@ int main(int argc, char *argv[])
     **matrixconfig = 1;
     driver->SetMatrixConfig(matrixconfig, 1, 1);
 #endif
-    ScrollingTextDisplay *display = new ScrollingTextDisplay(driver, 32, 32);
+    ScrollingTextDisplay *display = new ScrollingTextDisplay(driver, 64, 32);
     display->setText("Hello world! 1234567890 ~!@#$%^&*()_+[]{};:'\",<.>/?\\|");
     display->setScrollingSpeed(30);
+
+    RPLDCommunications *test = new RPLDCommunications();
+    test->sendSetting("setting", 1);
+    test->connect();
 
     // Create the display thread
     QThread *displayThread = new QThread();

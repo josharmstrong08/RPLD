@@ -60,7 +60,7 @@ void ScrollingTextDisplay::start()
 void ScrollingTextDisplay::update()
 {
     // Display the frame--------------------------------------------------
-    this->driver->OutputFrame(this->buffer, 32, 32);
+    this->driver->OutputFrame(this->buffer, this->width, this->height);
 
     // Scroll ------------------------------------------------------------
     // TODO Adjust with scrolling speed here
