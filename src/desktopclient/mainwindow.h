@@ -1,10 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "rpldcommunications.h"
 #include <QMainWindow>
-#include <stdio.h>
-#include <QString>
-#include <QDebug>
 
 namespace Ui {
 class MainWindow;
@@ -31,6 +29,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    RPLDCommunications communications;
 };
 
 #endif // MAINWINDOW_H
