@@ -6,6 +6,7 @@
 #include <QColorDialog>
 
 #include <cstdio>
+#include <QDebug>
 #include <QAbstractSlider>
 
 
