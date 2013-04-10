@@ -31,7 +31,7 @@ QMAKE_CXXFLAGS += -std=c++0x
 
 DEFINES += USE_STD_OUT
 
-unix:!macx|win32: LIBS += -L$$PWD/../build-RPLDCommunications-Desktop_Qt_4_8_4_in_PATH_System-Debug/ -lRPLDCommunications
+unix:!macx|win32: LIBS += -L$$PWD/../build-RPLDCommunications/ -lRPLDCommunications
 
 INCLUDEPATH += $$PWD/../rpldcommunications
 DEPENDPATH += $$PWD/../rpldcommunications

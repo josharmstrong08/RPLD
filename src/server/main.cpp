@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 #endif
     ScrollingTextDisplay *display = new ScrollingTextDisplay(driver, 64, 32);
     display->setText("Hello world! 1234567890 ~!@#$%^&*()_+[]{};:'\",<.>/?\\|");
-    display->setScrollingSpeed(30);
+    display->setScrollingSpeed(1);
 
     RPLDCommunications *test = new RPLDCommunications();
     test->sendSetting("setting", 1);

@@ -66,7 +66,7 @@ void ScrollingTextDisplay::update()
     // TODO Adjust with scrolling speed here
     this->currentOffset -= 33 / 1000.0 * (double)this->scrollingSpeed;
     if (this->currentOffset <= this->maxOffset) {
-        this->currentOffset = this->width;
+        this->currentOffset = 0;
     }
 
     // Create the next frame for next update -----------------------------
@@ -178,7 +178,7 @@ void ScrollingTextDisplay::setText(QString text)
     for (int i = 0; i < text.length(); i++) {
         this->maxOffset -= this->fontInfo.charInfo[text[i].toLatin1() - this->fontInfo.startChar].widthBits + 5;
     }
-    this->currentOffset = this->width;
+    this->currentOffset = 0;
 }
 
 /**

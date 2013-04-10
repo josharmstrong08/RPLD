@@ -28,3 +28,5 @@ unix:!symbian {
     }
     INSTALLS += target
 }
+
+DESTDIR = ../build-RPLDCommunications
