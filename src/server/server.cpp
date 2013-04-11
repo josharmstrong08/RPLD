@@ -56,8 +56,6 @@ Server::Server(QObject *parent) :
     display->moveToThread(displayThread);
     // Start the thread
     displayThread->start();
-
-    //displayThread->wait();
 }
 
 /**

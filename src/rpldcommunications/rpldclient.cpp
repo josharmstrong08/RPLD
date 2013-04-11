@@ -33,7 +33,19 @@ RPLDClient::ConnectionStatus RPLDClient::getConnectionStatus()
 
 void RPLDClient::sendSetting(QString settingName, QVariant value)
 {
-    this->tcpSocket->write(value.toString().toAscii());
+    //this->tcpSocket->write(value.toString().toAscii());
+
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+    out << (quint16)0;
+    out << settingName << value;
+    out.device()->seek(0);
+    out << (quint16)(block.size() - sizeof(quint16));
+
+    this->tcpSocket->write(block);
+
+
 }
 
 void RPLDClient::connected()

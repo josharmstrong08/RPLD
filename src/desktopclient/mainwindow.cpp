@@ -60,18 +60,11 @@ void MainWindow::on_colorButton_clicked()
 void MainWindow::on_uploadButton_clicked()
 {   
     // This will upload the contents to the server
-    // Need to create a class to send the data in over serialization.
     QString finaltext;
-   // int scrollspeed;
-    printf("upload pressed\n");
-    fflush(stdout);
-    qDebug() << this->ui->textEdit->text(); // Text of the line
-    qDebug() << this->ui->scrollSpeedSlider->value();
-    qDebug() << this->textColor;
 
-    this->communicationsClient->sendSetting("text", this->ui->textEdit->text());
+    //this->communicationsClient->sendSetting("text", this->ui->textEdit->text());
     this->communicationsClient->sendSetting("speed", this->ui->scrollSpeedSlider->value());
-    this->communicationsClient->sendSetting("color", QString("%i,%i,%i").arg(this->textColor.red(), this->textColor.green(), this->textColor.blue()));
+    //this->communicationsClient->sendSetting("color", QString("%i,%i,%i").arg(this->textColor.red()).arg(this->textColor.green()).arg(this->textColor.blue()));
 }
 
 void MainWindow::on_shutdownButton_clicked()

@@ -15,7 +15,7 @@ public:
 
 private slots:
     void acceptConnection();
-    void startRead();
+    void dataReady();
 
 signals:
     void recievedSetting(QString settingName, QVariant value);
@@ -23,7 +23,8 @@ signals:
 private:
   QTcpServer *server;
   QTcpSocket *client;
-    
+  quint16 messageSize;
+  bool recievingMessage;
 };
 
 #endif // RPLDSERVER_H
