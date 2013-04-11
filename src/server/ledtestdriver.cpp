@@ -15,6 +15,14 @@ int LEDTestDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned lon
         std::cout << std::endl;
     }
 
+    int i;
+    for (i = 0 ; i < width * height * 3; i++) {
+        if (frame[i] > 0x00) {
+            break;
+        }
+    }
+
+    std::cout << "Color: (" << (int)frame[i] << "," << (unsigned int)frame[i+1] << "," << (unsigned short)frame[i+2] << ")" << std::endl;
     std::cout << "+";
     for (unsigned long x = 0; x < width; x++) {
         std::cout << "-";

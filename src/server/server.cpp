@@ -70,6 +70,10 @@ void Server::recievedSetting(QString settingName, QVariant value)
     } else if (settingName == "speed") {
         this->display->setScrollingSpeed(value.toInt());
     } else if (settingName == "color") {
-        qDebug() << value.toString();
+        QString string = value.toString();
+        unsigned char red = string.section(',', 0, 0).toUInt();
+        unsigned char green = string.section(',', 1, 1).toUInt();
+        unsigned char blue = string.section(',', 2, 2).toUInt();
+        this->display->setColor(red, green, blue);
     }
 }

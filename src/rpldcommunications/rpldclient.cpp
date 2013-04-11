@@ -44,8 +44,6 @@ void RPLDClient::sendSetting(QString settingName, QVariant value)
     out << (quint16)(block.size() - sizeof(quint16));
 
     this->tcpSocket->write(block);
-
-
 }
 
 void RPLDClient::connected()

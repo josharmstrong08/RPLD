@@ -30,6 +30,9 @@ ScrollingTextDisplay::ScrollingTextDisplay(LEDDriver *driver, unsigned long widt
     this->maxOffset = this->width;
     this->text = "";
     this->scrollingSpeed = 0;
+    this->colorRed = 0xff;
+    this->colorBlue = 0xff;
+    this->colorGreen = 0xff;
 }
 
 /**

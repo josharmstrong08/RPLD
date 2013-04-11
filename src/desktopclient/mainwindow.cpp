@@ -62,9 +62,10 @@ void MainWindow::on_uploadButton_clicked()
     // This will upload the contents to the server
     QString finaltext;
 
-    //this->communicationsClient->sendSetting("text", this->ui->textEdit->text());
+    this->communicationsClient->sendSetting("text", this->ui->textEdit->text());
     this->communicationsClient->sendSetting("speed", this->ui->scrollSpeedSlider->value());
-    //this->communicationsClient->sendSetting("color", QString("%i,%i,%i").arg(this->textColor.red()).arg(this->textColor.green()).arg(this->textColor.blue()));
+    QString colorString = QString::number(this->textColor.red()) + "," + QString::number(this->textColor.green()) + "," + QString::number(this->textColor.blue());
+    this->communicationsClient->sendSetting("color", colorString);
 }
 
 void MainWindow::on_shutdownButton_clicked()
