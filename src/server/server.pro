@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core
+QT       += network
 
 QT       -= gui
 
@@ -19,13 +20,15 @@ SOURCES += main.cpp \
     ledmatrixdriver.cpp \
     scrollingtextdisplay.cpp \
     ledtestdriver.cpp \
-    font.cpp
+    font.cpp \
+    server.cpp
 
 HEADERS += \
     leddriver.h \
     ledmatrixdriver.h \
     scrollingtextdisplay.h \
-    ledtestdriver.h
+    ledtestdriver.h \
+    server.h
 
 QMAKE_CXXFLAGS += -std=c++0x
 

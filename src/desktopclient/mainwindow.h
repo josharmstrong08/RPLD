@@ -1,7 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "rpldcommunications.h"
+#include "rpldclient.h"
+#include "displayconfigwidget.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -21,15 +22,17 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionContents_triggered();
     void on_colorButton_clicked();
-
     void on_uploadButton_clicked();
-
     void on_shutdownButton_clicked();
+    void on_connectButton_clicked();
 
+    void connectionStatusChanged(RPLDClient::ConnectionStatus status);
 
 private:
     Ui::MainWindow *ui;
-    RPLDCommunications communications;
+    DisplayConfigWidget *displayConfigWidget;
+    RPLDClient *communicationsClient;
+    QColor textColor;
 };
 
 #endif // MAINWINDOW_H

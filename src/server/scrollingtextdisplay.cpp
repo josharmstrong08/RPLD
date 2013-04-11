@@ -186,7 +186,7 @@ void ScrollingTextDisplay::setText(QString text)
  * @param color The new text color. The actual color displayed is dependent
  *              on the hardware and driver.
  */
-void ScrollingTextDisplay::setColor(unsigned short red, unsigned short green, unsigned short blue)
+void ScrollingTextDisplay::setColor(unsigned char red, unsigned char green, unsigned char blue)
 {
     this->colorRed = red;
     this->colorGreen = green;

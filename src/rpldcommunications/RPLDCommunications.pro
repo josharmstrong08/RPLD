@@ -13,12 +13,16 @@ TEMPLATE = lib
 
 DEFINES += RPLDCOMMUNICATIONS_LIBRARY
 
-SOURCES += rpldcommunications.cpp \
-    message.cpp
+SOURCES += \
+    message.cpp \
+    rpldserver.cpp \
+    rpldclient.cpp
 
-HEADERS += rpldcommunications.h\
+HEADERS +=\
         rpldcommunications_global.h \
-    message.h
+    message.h \
+    rpldserver.h \
+    rpldclient.h
 
 unix:!symbian {
     maemo5 {
