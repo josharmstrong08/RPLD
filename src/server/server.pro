@@ -35,6 +35,7 @@ QMAKE_CXXFLAGS += -std=c++0x
 DEFINES += USE_STD_OUT
 
 unix:!macx|win32: LIBS += -L$$PWD/../build-RPLDCommunications/ -lRPLDCommunications
+#LIBS += -lwiringPi
 
 INCLUDEPATH += $$PWD/../rpldcommunications
 DEPENDPATH += $$PWD/../rpldcommunications

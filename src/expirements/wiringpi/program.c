@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <wiringPi.h>
-
+/*
 int OE = 9;
 int SCLK = 8;
 int LAT = 14;
@@ -15,6 +15,21 @@ int B2 = 4;
 int r2 = 5;
 int g2 = 6;
 int b2 = 7;
+*/
+
+int OE = 15;
+int SCLK = 16;
+int LAT = 0;
+int A = 4;
+int B = 12;
+int C = 1;
+int D = 3;
+int R1 = 11;
+int G1 = 14;
+int B1 = 6;
+int R2 = 10;
+int G2 = 13;
+int B2 = 5;
 
 void setup() {
   pinMode(OE, OUTPUT);
@@ -26,11 +41,11 @@ void setup() {
   pinMode(D, OUTPUT);
   
   pinMode(R1, OUTPUT);
-  pinMode(r2, OUTPUT);
+  pinMode(R2, OUTPUT);
+  pinMode(G1, OUTPUT);
   pinMode(G2, OUTPUT);
-  pinMode(g2, OUTPUT);
+  pinMode(B1, OUTPUT);
   pinMode(B2, OUTPUT);
-  pinMode(b2, OUTPUT);
   
   digitalWrite(SCLK, LOW);
   digitalWrite(LAT, LOW);
@@ -40,11 +55,11 @@ void setup() {
   digitalWrite(C, LOW);
   digitalWrite(D, LOW);
   digitalWrite(R1, LOW);
-  digitalWrite(r2, LOW);
+  digitalWrite(R2, LOW);
+  digitalWrite(G1, LOW);
   digitalWrite(G2, LOW);
-  digitalWrite(g2, LOW);
+  digitalWrite(B1, LOW);
   digitalWrite(B2, LOW);
-  digitalWrite(b2, LOW);
   //---------------------------
   digitalWrite(OE, LOW);
 }
@@ -57,18 +72,18 @@ void clockInData() {
   for (column = 0; column < 32; column++) {
     if (column < seperator) {
       digitalWrite(R1, HIGH);
-      digitalWrite(r2, LOW);
-      digitalWrite(G2, LOW);
-      digitalWrite(g2, HIGH);
+      digitalWrite(R2, LOW);
+      digitalWrite(G1, LOW);
+      digitalWrite(G2, HIGH);
+      digitalWrite(B1, LOW);
       digitalWrite(B2, LOW);
-      digitalWrite(b2, LOW);
     } else {
       digitalWrite(R1, LOW);
-      digitalWrite(r2, HIGH);
-      digitalWrite(G2, LOW);
-      digitalWrite(g2, HIGH);
+      digitalWrite(R2, HIGH);
+      digitalWrite(G1, LOW);
+      digitalWrite(G2, HIGH);
+      digitalWrite(B1, HIGH);
       digitalWrite(B2, HIGH);
-      digitalWrite(b2, HIGH);
     }
 
     digitalWrite(SCLK, LOW);

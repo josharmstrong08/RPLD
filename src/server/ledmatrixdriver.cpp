@@ -3,28 +3,30 @@
  */
 
 #include "ledmatrixdriver.h"
-//#include <wiringPi.h>
+#ifndef USE_STD_OUT
+#include <wiringPi.h>
+#endif
 
-#define OE      15;
-#define SCLK    16;
-#define LAT     0;
-#define A       4;
-#define B       12;
-#define C       1;
-#define D       3;
-#define R1      11;
-#define G1      14;
-#define B1      6;
-#define R2      10;
-#define G2      13;
-#define B2      5;
+#define OE      15
+#define SCLK    16
+#define LAT     0
+#define A       4
+#define B       12
+#define C       1
+#define D       3
+#define R1      11
+#define G1      14
+#define B1      6
+#define R2      10
+#define G2      13
+#define B2      5
 
 /**
  * @brief LEDMatrixDriver::LEDMatrixDriver
  */
 LEDMatrixDriver::LEDMatrixDriver()
 {
-    /*
+#ifndef USE_STD_OUT
     wiringPiSetup();
 
     pinMode(OE, OUTPUT);
@@ -50,13 +52,13 @@ LEDMatrixDriver::LEDMatrixDriver()
     digitalWrite(C, LOW);
     digitalWrite(D, LOW);
     digitalWrite(R1, LOW);
-    digitalWrite(r2, LOW);
+    digitalWrite(R2, LOW);
+    digitalWrite(G1, LOW);
     digitalWrite(G2, LOW);
-    digitalWrite(g2, LOW);
+    digitalWrite(B1, LOW);
     digitalWrite(B2, LOW);
-    digitalWrite(b2, LOW);
     digitalWrite(OE, LOW);
-*/
+#endif
 }
 
 /**

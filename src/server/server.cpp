@@ -25,7 +25,7 @@ Server::Server(QObject *parent) :
     LEDTestDriver *driver = new LEDTestDriver();
 #else
     // Set up the scrolling text display with the led matrix driver.
-    LEDMatrixDriver *driSOME_DEFINE=valuever = new LEDMatrixDriver();
+    LEDMatrixDriver *driver = new LEDMatrixDriver();
     int **matrixconfig = (int**)malloc(sizeof(int*));
     *matrixconfig = (int*)malloc(sizeof(int));
     **matrixconfig = 1;
