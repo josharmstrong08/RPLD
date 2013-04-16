@@ -71,9 +71,8 @@ void MainWindow::on_uploadButton_clicked()
 void MainWindow::on_shutdownButton_clicked()
 {
     // Sends a shutdown signal to the Pi to turn it off.
-    // Will either send
-    printf("shutdown pressed\n");
-     fflush(stdout);
+    this->communicationsClient->sendSetting("shutdown", 0);
+    /*NEEDS TESTED ON PI!!!*/
 }
 
 void MainWindow::on_connectButton_clicked()

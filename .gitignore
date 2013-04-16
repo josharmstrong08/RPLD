@@ -26,8 +26,11 @@ html
 latex
 
 # Windows
-
 Thumbs.db
+
+# gedit temps
+*~
 
 # targets
 server
+DesktopClient

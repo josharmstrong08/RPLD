@@ -75,5 +75,9 @@ void Server::recievedSetting(QString settingName, QVariant value)
         unsigned char green = string.section(',', 1, 1).toUInt();
         unsigned char blue = string.section(',', 2, 2).toUInt();
         this->display->setColor(red, green, blue);
+    } else if (settingName == "shutdown") {
+        system("/sbin/shutdown -P now");
+        /*NEEDS TESTED ON PI!!!*/
     }
+    
 }
