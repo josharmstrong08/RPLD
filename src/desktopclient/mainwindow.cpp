@@ -14,11 +14,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    /* Instead of using the config widget, a simply number slider is used for
+     * horizontal-only configurations.
     displayConfigWidget = new DisplayConfigWidget(this);
     int configLabelIndex = ui->gridLayout->indexOf(ui->matrixConfigLabel);
     int row, column, rowspan, columnspan;
     ui->gridLayout->getItemPosition(configLabelIndex, &row, &column, &rowspan, &columnspan);
     ui->gridLayout->addWidget(displayConfigWidget, row, column + 1);
+    */
 
     this->textColor = QColor(Qt::white);
     this->ui->colorButton->setStyleSheet("background-color: white");
@@ -60,12 +63,11 @@ void MainWindow::on_colorButton_clicked()
 void MainWindow::on_uploadButton_clicked()
 {   
     // This will upload the contents to the server
-    QString finaltext;
-
     this->communicationsClient->sendSetting("text", this->ui->textEdit->text());
     this->communicationsClient->sendSetting("speed", this->ui->scrollSpeedSlider->value());
     QString colorString = QString::number(this->textColor.red()) + "," + QString::number(this->textColor.green()) + "," + QString::number(this->textColor.blue());
     this->communicationsClient->sendSetting("color", colorString);
+    this->communicationsClient->sendSetting("matrixcount", this->ui->matrixCountSpinner->value());
 }
 
 void MainWindow::on_shutdownButton_clicked()

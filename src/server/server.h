@@ -18,7 +18,7 @@ private slots:
 
 private:
     ScrollingTextDisplay *display;
-    
+    LEDDriver *driver;
 };
 
 #endif // SERVER_H

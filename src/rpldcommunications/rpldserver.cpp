@@ -1,5 +1,6 @@
 #include "rpldserver.h"
 #include <QDebug>
+#include <QDataStream>
 
 /**
  * @brief Initializes a new instance of the @see RPLDServer class. The server

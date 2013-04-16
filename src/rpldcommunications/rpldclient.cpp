@@ -1,6 +1,7 @@
 #include "rpldclient.h"
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QDataStream>
 
 /**
  * @brief Initializes a new instance of the @see RPLDClient class.

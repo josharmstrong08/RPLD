@@ -22,16 +22,18 @@ Server::Server(QObject *parent) :
 {
 #ifdef USE_STD_OUT
     // Setup the scrolling text display with the test stdout driver.
-    LEDTestDriver *driver = new LEDTestDriver();
+    LEDTestDriver *testdriver = new LEDTestDriver();
+    this->driver = testdriver;
 #else
     // Set up the scrolling text display with the led matrix driver.
-    LEDMatrixDriver *driver = new LEDMatrixDriver();
+    LEDMatrixDriver *matrixdriver = new LEDMatrixDriver();
     int **matrixconfig = (int**)malloc(sizeof(int*));
     *matrixconfig = (int*)malloc(sizeof(int));
     **matrixconfig = 1;
     driver->SetMatrixConfig(matrixconfig, 1, 1);
+    this->driver = matrixdriver;
 #endif
-    this->display = new ScrollingTextDisplay(driver, 64, 32);
+    this->display = new ScrollingTextDisplay(this->driver, 64, 32);
 
     this->display->setText("Hello world!");
     this->display->setScrollingSpeed(1);
@@ -78,6 +80,15 @@ void Server::recievedSetting(QString settingName, QVariant value)
     } else if (settingName == "shutdown") {
         system("/sbin/shutdown -P now");
         /*NEEDS TESTED ON PI!!!*/
+    } else if (settingName == "matrixcount") {
+#ifndef USE_STD_OUT
+        int count = value.toInt();
+        int **matrixconfig = (int**)malloc(sizeof(int*));
+        *matrixconfig = (int*)malloc(sizeof(int) * count);
+        for (int i = 0; i < count; i++) {
+            matrixconfig[0][i] = i;
+        }
+        (static_cast<LEDMatrixDriver>this->driver)->SetMatrixConfig(matrixconfig, count, 1);
+#endif
     }
-    
 }
