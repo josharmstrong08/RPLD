@@ -25,7 +25,8 @@
 /**
  * @brief LEDMatrixDriver::LEDMatrixDriver
  */
-LEDMatrixDriver::LEDMatrixDriver()
+LEDMatrixDriver::LEDMatrixDriver(QObject *parent) :
+    QObject(parent)
 {
 #ifndef USE_STD_OUT
     wiringPiSetup();
@@ -75,7 +76,7 @@ LEDMatrixDriver::LEDMatrixDriver()
  */
 int LEDMatrixDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned long height)
 {
-
+    
     return 0;
 }
 
@@ -92,14 +93,29 @@ int LEDMatrixDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned l
  *        And a diagonal line as:
  *          @code{.cpp} int config[4][4] = {{0,-1,-1,1},{-1,1,-1,-1},{-1,-1,2,-1},{-1,-1,-1,3}} @endcode
  *        This function will free the memory in config by calling the free() function.
- * @param width
- * @param height
+ * 
+ *        Currently this function only handles straight horizontal configurations.
+ * @param width   The maximum width, in number of matrices.
+ * @param height  The maximum height, in number of matrices. 
  */
 void LEDMatrixDriver::SetMatrixConfig(int **config, unsigned int width, unsigned int height)
 {
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      qDebug() << "Config (" << x << "," << y << "): " << config[x][y];
+    if (height != 1) {
+        throw "Matrices must all be in a horizontal row.";
     }
-  }
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            qDebug() << "Config (" << x << "," << y << "): " << config[y][x];
+        }
+    }
+  
+    // Record the number of matrices
+    this->matrixCount = width;    
+
+    // Free the memory used by config
+    for (int y = 0; y < height; y++) {
+        free(config[y]);
+    }
 }
+

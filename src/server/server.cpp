@@ -78,7 +78,7 @@ void Server::recievedSetting(QString settingName, QVariant value)
         unsigned char blue = string.section(',', 2, 2).toUInt();
         this->display->setColor(red, green, blue);
     } else if (settingName == "shutdown") {
-        system("/sbin/shutdown -P now");
+        system("halt");
         /*NEEDS TESTED ON PI!!!*/
     } else if (settingName == "matrixcount") {
 #ifndef USE_STD_OUT
