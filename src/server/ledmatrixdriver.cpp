@@ -6,6 +6,7 @@
 #ifndef USE_STD_OUT
 #include <wiringPi.h>
 #endif
+#include <QDebug>
 
 #define OE      15
 #define SCLK    16
@@ -96,5 +97,9 @@ int LEDMatrixDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned l
  */
 void LEDMatrixDriver::SetMatrixConfig(int **config, unsigned int width, unsigned int height)
 {
-
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      qDebug() << "Config (" << x << "," << y << "): " << config[x][y];
+    }
+  }
 }

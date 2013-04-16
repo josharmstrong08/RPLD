@@ -30,7 +30,7 @@ Server::Server(QObject *parent) :
     int **matrixconfig = (int**)malloc(sizeof(int*));
     *matrixconfig = (int*)malloc(sizeof(int));
     **matrixconfig = 1;
-    driver->SetMatrixConfig(matrixconfig, 1, 1);
+    matrixdriver->SetMatrixConfig(matrixconfig, 1, 1);
     this->driver = matrixdriver;
 #endif
     this->display = new ScrollingTextDisplay(this->driver, 64, 32);
@@ -88,7 +88,8 @@ void Server::recievedSetting(QString settingName, QVariant value)
         for (int i = 0; i < count; i++) {
             matrixconfig[0][i] = i;
         }
-        (static_cast<LEDMatrixDriver>this->driver)->SetMatrixConfig(matrixconfig, count, 1);
+        LEDMatrixDriver *matrixdriver = static_cast<LEDMatrixDriver*>(this->driver);
+        matrixdriver->SetMatrixConfig(matrixconfig, count, 1);
 #endif
     }
 }
