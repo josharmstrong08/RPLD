@@ -19,7 +19,8 @@ class ScrollingTextDisplay : public QObject
 {
     Q_OBJECT
 public:
-    explicit ScrollingTextDisplay(LEDDriver *driver, unsigned long width, unsigned long height, QObject *parent = 0);
+    //explicit ScrollingTextDisplay(LEDDriver *driver, unsigned long width, unsigned long height, QObject *parent = 0);
+    explicit ScrollingTextDisplay(unsigned long width, unsigned long height, QObject *parent = 0);
     ~ScrollingTextDisplay();
 
 private:
@@ -39,12 +40,17 @@ public slots:
      * @param speed The speed in pixels per second.
      */
     void setScrollingSpeed(int speed);
+    void setWidth(unsigned long width);
+    void setHeight(unsigned long height);
+
+signals:
+    void updateFrame(uint8_t *frame, unsigned long width, unsigned long height);
 
 private slots:
     void update();
 
 private:
-    LEDDriver *driver;
+    //LEDDriver *driver;
     unsigned long width;
     unsigned long height;
     QTimer *timer;

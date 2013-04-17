@@ -18,7 +18,11 @@ int main(int argc, char *argv[])
 {
     QCoreApplication *a = new QCoreApplication(argc, argv);
 
-    Server *server = new Server(a);
+    // Create the server instance. The consuctor of it will set up
+    // the driver, scrolling text display, and start listening for
+    // incoming settings.
+    //Server *server = new Server(a);
+    Server server(a);
 
     return a->exec();
 }

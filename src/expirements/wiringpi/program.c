@@ -108,12 +108,13 @@ void loop() {
     }
   }
 
+  digitalWrite(LAT, LOW);
   int row = 0;
   for (row = 0; row < 16; row++) {
     // disable output
     //digitalWrite(oe, HIGH);
     // latch data load in previous cycle
-    digitalWrite(LAT, HIGH);
+    //digitalWrite(LAT, HIGH);
 
     // select the row
     selectRow(row);
@@ -121,10 +122,11 @@ void loop() {
     // renable output
     //digitalWrite(oe, LOW);
     // unlatch
-    digitalWrite(LAT, LOW);
+    //digitalWrite(LAT, LOW);
 
     clockInData();
-    delayMicroseconds(1000);
+    //delayMicroseconds(1000);
+    delay(500);
   }
 }
 
@@ -134,9 +136,44 @@ int main() {
     return 1; 
   }
 
-  piHiPri(99);
+  piHiPri(0);
   
   setup();
+
+  unsigned long counter = 0;
+  unsigned int delta = 0;
+
+  while (1) {
+    unsigned int row; 
+    counter++;
+    if (counter == 4) {
+      counter = 0;
+      delta++;
+      if (delta == 32) {
+        delta = 0;
+      }
+    }
+    for (row = 0; row < 16; row++) {
+      digitalWrite(OE, HIGH);
+      selectRow(row);
+      digitalWrite(LAT, LOW);
+      int i;
+      for (i = 0; i < 32; i++) {
+        digitalWrite(R1, (delta + i) % 10 == 0);
+        digitalWrite(G1, LOW);
+        digitalWrite(B1, LOW);
+        digitalWrite(R2, (delta + i) % 10 == 0);
+        digitalWrite(G2, LOW);
+        digitalWrite(B2, LOW);
+
+        digitalWrite(SCLK, LOW);
+        digitalWrite(SCLK, HIGH);
+      }
+      digitalWrite(LAT, HIGH);
+      digitalWrite(OE, LOW);
+      delayMicroseconds(600);
+    }
+  }
   
   while (1) {
     loop();

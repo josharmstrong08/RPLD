@@ -9,6 +9,7 @@
 #include "leddriver.h"
 #include <cstdint>
 #include <QObject>
+#include <QTimer>
 
 /**
  * @brief The LEDMatrixDriver class
@@ -18,11 +19,22 @@ class LEDMatrixDriver : public LEDDriver
     Q_OBJECT
 public:
     explicit LEDMatrixDriver(QObject *parent = 0);
-    int OutputFrame(uint8_t *frame, unsigned long width, unsigned long height);
     void SetMatrixConfig(int **config, unsigned int width, unsigned int height);
+
+public slots:
+    int outputFrame(uint8_t *frame, unsigned long width, unsigned long height);
+    void start();
+    void stop();
+
+private slots:
+    void output();
 
 private:
     int matrixCount;
+    QTimer *timer;
+    uint8_t *buffer;
+    uint8_t *nextbuffer;
+    unsigned int currentRow;
 };
 
 #endif // LEDMATRIXDRIVER_H

@@ -17,7 +17,10 @@ class LEDDriver : public QObject
     Q_OBJECT
 public:
     explicit LEDDriver(QObject *parent=0);
-    virtual int OutputFrame(uint8_t *frame, unsigned long width, unsigned long height) =0;
+public slots:
+    virtual void start() =0;
+    virtual void stop() =0;
+    virtual int outputFrame(uint8_t *frame, unsigned long width, unsigned long height) =0;
 };
 
 #endif // LEDDRIVER_H
