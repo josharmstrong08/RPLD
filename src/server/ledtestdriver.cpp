@@ -9,6 +9,11 @@
  * @param height the height of the frame
  * @return Always returns 0 for success.
  */
+LEDTestDriver::LEDTestDriver(QObject *parent)
+    : LEDDriver(parent)
+{
+}
+
 int LEDTestDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned long height)
 {
     for (int i = 0; i < 80; i++) {

@@ -23,6 +23,7 @@ ScrollingTextDisplay::ScrollingTextDisplay(LEDDriver *driver, unsigned long widt
     QObject(parent)
 {
     this->driver = driver;
+    this->driver->setParent(this);
     this->width = width;
     this->height = height;
     this->buffer = new uint8_t [width * height * 3]();

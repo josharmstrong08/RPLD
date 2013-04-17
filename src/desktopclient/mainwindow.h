@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include "rpldclient.h"
-#include "displayconfigwidget.h"
+//#include "displayconfigwidget.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -30,7 +30,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    DisplayConfigWidget *displayConfigWidget;
+    //DisplayConfigWidget *displayConfigWidget;
     RPLDClient *communicationsClient;
     QColor textColor;
 };

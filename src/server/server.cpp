@@ -26,14 +26,14 @@ Server::Server(QObject *parent) :
     this->driver = testdriver;
 #else
     // Set up the scrolling text display with the led matrix driver.
-    LEDMatrixDriver *matrixdriver = new LEDMatrixDriver();
+    LEDMatrixDriver *matrixdriver = new LEDMatrixDriver(this);
     int **matrixconfig = (int**)malloc(sizeof(int*));
     *matrixconfig = (int*)malloc(sizeof(int));
     **matrixconfig = 1;
     matrixdriver->SetMatrixConfig(matrixconfig, 1, 1);
     this->driver = matrixdriver;
 #endif
-    this->display = new ScrollingTextDisplay(this->driver, 64, 32);
+    this->display = new ScrollingTextDisplay(this->driver, 64, 32, this);
 
     this->display->setText("Hello world!");
     this->display->setScrollingSpeed(1);

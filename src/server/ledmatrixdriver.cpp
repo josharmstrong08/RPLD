@@ -7,6 +7,7 @@
 #include <wiringPi.h>
 #endif
 #include <QDebug>
+#include <QObject>
 
 #define OE      15
 #define SCLK    16
@@ -26,7 +27,7 @@
  * @brief LEDMatrixDriver::LEDMatrixDriver
  */
 LEDMatrixDriver::LEDMatrixDriver(QObject *parent) :
-    QObject(parent)
+    LEDDriver(parent)
 {
 #ifndef USE_STD_OUT
     wiringPiSetup();

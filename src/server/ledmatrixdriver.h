@@ -13,7 +13,7 @@
 /**
  * @brief The LEDMatrixDriver class
  */
-class LEDMatrixDriver : public LEDDriver, public QObject
+class LEDMatrixDriver : public LEDDriver
 {
     Q_OBJECT
 public:

@@ -12,7 +12,11 @@ class LEDMatrixDriverHelper : public QObject
 {
     Q_OBJECT
 public:
+    explicit LEDMatrixDriverHelper(QObject *parent = 0);
 
-}
+public slots:
+    void start();
+    void newFrame(uint8_t *frame, unsigned long width, unsigned long height);
+};
 
 #endif

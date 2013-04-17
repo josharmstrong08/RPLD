@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "displayconfigwidget.h"
+//#include "displayconfigwidget.h"
 #include <QMessageBox>
 #include <QColorDialog>
 
@@ -95,7 +95,7 @@ void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
         this->ui->colorButton->setEnabled(true);
         this->ui->scrollSpeedSlider->setEnabled(true);
         this->ui->textEdit->setEnabled(true);
-        this->displayConfigWidget->setEnabled(true);
+        //this->displayConfigWidget->setEnabled(true);
     } else if (status == RPLDClient::DISCONNECTED || RPLDClient::CONNECTING){
         if (status == RPLDClient::CONNECTING) {
             this->ui->statusLabel->setText("Connecting..");
@@ -111,6 +111,6 @@ void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
         this->ui->colorButton->setEnabled(false);
         this->ui->scrollSpeedSlider->setEnabled(false);
         this->ui->textEdit->setEnabled(false);
-        this->displayConfigWidget->setEnabled(false);
+        //this->displayConfigWidget->setEnabled(false);
     }
 }
