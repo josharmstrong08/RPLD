@@ -33,19 +33,29 @@ Server::Server(QObject *parent) :
     matrixdriver->SetMatrixConfig(matrixconfig, 1, 1);
     this->driver = matrixdriver;
 #endif
-    this->display = new ScrollingTextDisplay(this->driver, 64, 32);
 
+    // Create the driver thread
+    QThread *driverThread = new QThread(this);
+    // When the thread starts, start the driver.
+    QObject::connect(driverThread, SIGNAL(started()), this->driver, SLOT(start()));
+    // Delete the driver when the thread stops (when driverThread->quit() is called)
+    QObject::connect(driverThread, SIGNAL(finished()), this->driver, SLOT(deleteLater()));
+    // Move the driver to the driver thread
+    this->driver->moveToThread(driverThread);
+
+    // Create the scrolling text display, which generates frames when needed.
+    this->display = new ScrollingTextDisplay(32, 32);
+    // connect the scrolling text display's update frame signal to the driver's output frame slot.
+    connect(this->display, SIGNAL(updateFrame(uint8_t*,ulong,ulong)), this->driver, SLOT(outputFrame(uint8_t*,ulong,ulong)));
+
+    // Set initial values
+    // TODO Load values from persistent storage, QSettings?
     this->display->setText("Hello world!");
     this->display->setScrollingSpeed(1);
     this->display->setColor(0xff, 0xff, 0xff);
 
-    // Start listening for incoming settings
-    RPLDServer *rpldServer = new RPLDServer(this);
-    QObject::connect(rpldServer, SIGNAL(recievedSetting(QString,QVariant)), this, SLOT(recievedSetting(QString,QVariant)));
-
     // Create the display thread
     QThread *displayThread = new QThread(this);
-
     // Start the display when the thread starts.
     QObject::connect(displayThread, SIGNAL(started()), display, SLOT(start()));
     // When the display finishes executing, quit the thread.
@@ -56,7 +66,14 @@ Server::Server(QObject *parent) :
     QObject::connect(displayThread, SIGNAL(finished()), qApp, SLOT(quit()));
     // Push the display onto the display thread
     display->moveToThread(displayThread);
-    // Start the thread
+
+    // Start listening for incoming settings
+    RPLDServer *rpldServer = new RPLDServer(this);
+    QObject::connect(rpldServer, SIGNAL(recievedSetting(QString,QVariant)), this, SLOT(recievedSetting(QString,QVariant)));
+
+    // Start the driver thread
+    driverThread->start();
+    // Start the display thread
     displayThread->start();
 }
 
@@ -81,8 +98,8 @@ void Server::recievedSetting(QString settingName, QVariant value)
         system("halt");
         /*NEEDS TESTED ON PI!!!*/
     } else if (settingName == "matrixcount") {
-#ifndef USE_STD_OUT
         int count = value.toInt();
+#ifndef USE_STD_OUT
         int **matrixconfig = (int**)malloc(sizeof(int*));
         *matrixconfig = (int*)malloc(sizeof(int) * count);
         for (int i = 0; i < count; i++) {
@@ -91,5 +108,7 @@ void Server::recievedSetting(QString settingName, QVariant value)
         LEDMatrixDriver *matrixdriver = static_cast<LEDMatrixDriver*>(this->driver);
         matrixdriver->SetMatrixConfig(matrixconfig, count, 1);
 #endif
+        this->display->setWidth(count * 32);
+        this->display->setHeight(32);
     }
 }

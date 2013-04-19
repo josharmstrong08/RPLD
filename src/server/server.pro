@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     scrollingtextdisplay.cpp \
     ledtestdriver.cpp \
     font.cpp \
-    server.cpp
+    server.cpp \
+    leddriver.cpp
 
 HEADERS += \
     leddriver.h \

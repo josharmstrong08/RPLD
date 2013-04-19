@@ -19,10 +19,12 @@
  * @param height The number of vertical pixel available.
  * @param parent The Qt parent.
  */
-ScrollingTextDisplay::ScrollingTextDisplay(LEDDriver *driver, unsigned long width, unsigned long height, QObject *parent) :
+//ScrollingTextDisplay::ScrollingTextDisplay(LEDDriver *driver, unsigned long width, unsigned long height, QObject *parent) :
+ScrollingTextDisplay::ScrollingTextDisplay(unsigned long width, unsigned long height, QObject *parent) :
     QObject(parent)
 {
-    this->driver = driver;
+    //this->driver = driver;
+    //this->driver->setParent(this);
     this->width = width;
     this->height = height;
     this->buffer = new uint8_t [width * height * 3]();
@@ -33,6 +35,8 @@ ScrollingTextDisplay::ScrollingTextDisplay(LEDDriver *driver, unsigned long widt
     this->colorRed = 0xff;
     this->colorBlue = 0xff;
     this->colorGreen = 0xff;
+
+    //connect(this, SIGNAL(updateFrame(uint8_t*,ulong,ulong)), this->driver, SLOT(OutputFrame(uint8_t*,ulong,ulong)));
 }
 
 /**
@@ -63,7 +67,8 @@ void ScrollingTextDisplay::start()
 void ScrollingTextDisplay::update()
 {
     // Display the frame--------------------------------------------------
-    this->driver->OutputFrame(this->buffer, this->width, this->height);
+    //this->driver->OutputFrame(this->buffer, this->width, this->height);
+    emit updateFrame(this->buffer, this->width, this->height);
 
     // Scroll ------------------------------------------------------------
     // TODO Adjust with scrolling speed here
@@ -73,10 +78,12 @@ void ScrollingTextDisplay::update()
     }
 
     // Create the next frame for next update -----------------------------
+    // Clear the buffer
     for (unsigned long i = 0; i < this->width * this->height * 3; i++) {
         this->buffer[i] = 0x00;
     }
 
+    // Write each character
     int tempOffset = this->currentOffset;
     for (int i = 0; i < this->text.length(); i++) {
         int bitmapWidth = this->fontInfo.charInfo[this->text[i].toLatin1() - this->fontInfo.startChar].widthBits;
@@ -167,7 +174,8 @@ void ScrollingTextDisplay::stop()
         this->buffer[i] = 0x00;
     }
 
-    this->driver->OutputFrame(this->buffer, width, height);
+    //this->driver->OutputFrame(this->buffer, width, height);
+    emit updateFrame(this->buffer, this->width, this->height);
 }
 
 /**
@@ -204,4 +212,14 @@ void ScrollingTextDisplay::setColor(unsigned char red, unsigned char green, unsi
 void ScrollingTextDisplay::setScrollingSpeed(int speed)
 {
     this->scrollingSpeed = speed;
+}
+
+void ScrollingTextDisplay::setWidth(unsigned long width) 
+{
+    this->width = width;
+}
+
+void ScrollingTextDisplay::setHeight(unsigned long height)
+{
+    this->height = height;
 }

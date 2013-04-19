@@ -7,6 +7,9 @@
 #include <wiringPi.h>
 #endif
 #include <QDebug>
+#include <QObject>
+#include <QThread>
+#include <cstdint>
 
 #define OE      1
 #define SCLK    16
@@ -22,14 +25,18 @@
 #define G2      10
 #define B2      3
 
+#define CALC_BUFFER_OFFSET(X,Y,width) ((((Y) * (width)) * 3) + ((X) * 3))
+
 /**
  * @brief LEDMatrixDriver::LEDMatrixDriver
  */
 LEDMatrixDriver::LEDMatrixDriver(QObject *parent) :
-    QObject(parent)
+    LEDDriver(parent)
 {
 #ifndef USE_STD_OUT
     wiringPiSetup();
+
+    piHiPri(0); 
 
     pinMode(OE, OUTPUT);
     pinMode(SCLK, OUTPUT);
@@ -61,6 +68,13 @@ LEDMatrixDriver::LEDMatrixDriver(QObject *parent) :
     digitalWrite(B2, LOW);
     digitalWrite(OE, LOW);
 #endif
+
+    this->matrixCount = 1;
+    this->buffer = new uint8_t(32 * 1 * 3);
+    this->nextbuffer = this->buffer;
+    this->timer = new QTimer(this);
+    connect(this->timer, SIGNAL(timeout()), this, SLOT(output()));
+    this->currentRow = 0;
 }
 
 /**
@@ -74,10 +88,93 @@ LEDMatrixDriver::LEDMatrixDriver(QObject *parent) :
  * @param height The height of the output frame.
  * @return If an error occured it returns a nonzero integer, otherwise it returns 0.
  */
-int LEDMatrixDriver::OutputFrame(uint8_t *frame, unsigned long width, unsigned long height)
+int LEDMatrixDriver::outputFrame(uint8_t *frame, unsigned long width, unsigned long height)
 {
-    
+    if (height != 32 || width % 32 != 0) {
+        throw "Only horizontal configurations are supported.";
+    }
+    if (width != (unsigned long)this->matrixCount * 32) {
+        throw "Frame size does not match matrix configuration.";
+    }
+
+    this->nextbuffer = frame;
+    //this->matrixCount = width / 32;
+
     return 0;
+}
+
+void LEDMatrixDriver::start()
+{
+    // Start the timer
+    this->timer->start(1);
+}
+
+void LEDMatrixDriver::stop()
+{
+    // Stop the timer
+    this->timer->stop();
+}
+
+/**
+ * @brief Writes one new row of information from the buffer to the led matrices.
+ */
+void LEDMatrixDriver::output()
+{
+#ifndef USE_STD_OUT
+    digitalWrite(OE, HIGH);
+    // select the row
+    digitalWrite(A, this->currentRow & 0x01);
+    digitalWrite(B, this->currentRow & 0x02);
+    digitalWrite(C, this->currentRow & 0x04);
+    digitalWrite(D, this->currentRow & 0x08);
+
+    // unlatch
+    digitalWrite(LAT, LOW);
+
+    // Clock in some data
+    int column;
+    int width = this->matrixCount * 32;
+    for (column = 0; column < width; column++) {
+        uint8_t pixel1r = this->buffer[CALC_BUFFER_OFFSET(column, this->currentRow, width) + 0];
+        uint8_t pixel1g = this->buffer[CALC_BUFFER_OFFSET(column, this->currentRow, width) + 1];
+        uint8_t pixel1b = this->buffer[CALC_BUFFER_OFFSET(column, this->currentRow, width) + 2];
+        uint8_t pixel2r = this->buffer[CALC_BUFFER_OFFSET(column, this->currentRow + 16, width) + 0];
+        uint8_t pixel2g = this->buffer[CALC_BUFFER_OFFSET(column, this->currentRow + 16, width) + 1];
+        uint8_t pixel2b = this->buffer[CALC_BUFFER_OFFSET(column, this->currentRow + 16, width) + 2];
+
+        pixel1r = pixel1r < 128 ? 0 : 1;
+        pixel1g = pixel1g < 128 ? 0 : 1;
+        pixel1b = pixel1b < 128 ? 0 : 1;
+        pixel2r = pixel2r < 128 ? 0 : 1;
+        pixel2g = pixel2g < 128 ? 0 : 1;
+        pixel2b = pixel2b < 128 ? 0 : 1;
+
+        digitalWrite(R1, pixel1r);
+        digitalWrite(G1, pixel1g);
+        digitalWrite(B1, pixel1b);
+        digitalWrite(R2, pixel2r);
+        digitalWrite(G2, pixel2g);
+        digitalWrite(B2, pixel2b);
+
+        // Pulse the clock
+        digitalWrite(SCLK, LOW);
+        digitalWrite(SCLK, HIGH);
+    }
+
+    // Increment row
+    this->currentRow++;
+    if (this->currentRow == 16) {
+        uint8_t *temp = this->buffer;
+        this->buffer = this->nextbuffer;
+        this->nextbuffer = temp;
+        this->currentRow = 0;
+    }
+
+    // latch
+    digitalWrite(LAT, HIGH);
+    //digitalWrite(LAT, LOW);
+    digitalWrite(OE, LOW);
+#endif
 }
 
 /**
@@ -104,8 +201,8 @@ void LEDMatrixDriver::SetMatrixConfig(int **config, unsigned int width, unsigned
         throw "Matrices must all be in a horizontal row.";
     }
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
+    for (unsigned long y = 0; y < height; y++) {
+        for (unsigned long x = 0; x < width; x++) {
             qDebug() << "Config (" << x << "," << y << "): " << config[y][x];
         }
     }
@@ -114,8 +211,7 @@ void LEDMatrixDriver::SetMatrixConfig(int **config, unsigned int width, unsigned
     this->matrixCount = width;    
 
     // Free the memory used by config
-    for (int y = 0; y < height; y++) {
+    for (unsigned long y = 0; y < height; y++) {
         free(config[y]);
     }
 }
-
