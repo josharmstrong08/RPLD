@@ -8,19 +8,19 @@
 #endif
 #include <QDebug>
 
-#define OE      15
+#define OE      1
 #define SCLK    16
-#define LAT     0
-#define A       4
-#define B       12
-#define C       1
-#define D       3
-#define R1      11
-#define G1      14
-#define B1      6
-#define R2      10
-#define G2      13
-#define B2      5
+#define LAT     4
+#define A       2
+#define B       6
+#define C       15
+#define D       5
+#define R1      14
+#define G1      11
+#define B1      13
+#define R2      12
+#define G2      10
+#define B2      3
 
 /**
  * @brief LEDMatrixDriver::LEDMatrixDriver

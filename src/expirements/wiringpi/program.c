@@ -16,7 +16,7 @@ int r2 = 5;
 int g2 = 6;
 int b2 = 7;
 */
-
+/*
 int OE = 15;
 int SCLK = 16;
 int LAT = 0;
@@ -30,6 +30,21 @@ int B1 = 6;
 int R2 = 10;
 int G2 = 13;
 int B2 = 5;
+*/
+
+int OE = 1;
+int SCLK = 16;
+int LAT = 4;
+int A = 2;
+int B = 6;
+int C = 15;
+int D = 5;
+int R1 = 14;
+int G1 = 11;
+int B1 = 13;
+int R2 = 12;
+int G2 = 10;
+int B2 = 3;
 
 void setup() {
   pinMode(OE, OUTPUT);
