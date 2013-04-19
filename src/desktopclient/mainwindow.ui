@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>336</width>
-    <height>240</height>
+    <width>400</width>
+    <height>263</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>400</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Raspberry Pi LED Display</string>
@@ -25,7 +31,7 @@
     <item row="6" column="1" alignment="Qt::AlignLeft|Qt::AlignTop">
      <widget class="QLabel" name="matrixConfigLabel">
       <property name="text">
-       <string>Matrix Configuration:</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Matrix Count:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
@@ -64,12 +70,20 @@
       <property name="text">
        <string>Scrolling Speed:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
      </widget>
     </item>
     <item row="2" column="2">
      <widget class="QLineEdit" name="textEdit">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="font">
+       <font>
+        <family>MS Sans Serif</family>
+       </font>
       </property>
      </widget>
     </item>
@@ -142,7 +156,7 @@
       <item>
        <widget class="QLineEdit" name="ipAddress">
         <property name="text">
-         <string>127.0.0.1</string>
+         <string>cspi1.cs.uidaho.edu</string>
         </property>
        </widget>
       </item>
@@ -155,37 +169,6 @@
       </item>
      </layout>
     </item>
-    <item row="4" column="2" colspan="2">
-     <widget class="QSlider" name="scrollSpeedSlider">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="pageStep">
-       <number>10</number>
-      </property>
-      <property name="sliderPosition">
-       <number>30</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="invertedAppearance">
-       <bool>false</bool>
-      </property>
-      <property name="invertedControls">
-       <bool>false</bool>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TicksBelow</enum>
-      </property>
-      <property name="tickInterval">
-       <number>10</number>
-      </property>
-     </widget>
-    </item>
     <item row="6" column="2">
      <widget class="QSpinBox" name="matrixCountSpinner">
       <property name="minimum">
@@ -196,6 +179,75 @@
       </property>
      </widget>
     </item>
+    <item row="4" column="2">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QSlider" name="scrollSpeedSlider">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="maximum">
+         <number>200</number>
+        </property>
+        <property name="pageStep">
+         <number>10</number>
+        </property>
+        <property name="sliderPosition">
+         <number>30</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="invertedControls">
+         <bool>false</bool>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Slow</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Medium</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignHCenter|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Fast</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -203,7 +255,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>336</width>
+     <width>400</width>
      <height>21</height>
     </rect>
    </property>

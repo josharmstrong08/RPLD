@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->gridLayout->addWidget(displayConfigWidget, row, column + 1);
     */
 
+    this->connectionStatus = RPLDClient::DISCONNECTED;
+
     this->textColor = QColor(Qt::white);
     this->ui->colorButton->setStyleSheet("background-color: white");
 
@@ -72,24 +74,32 @@ void MainWindow::on_uploadButton_clicked()
 
 void MainWindow::on_shutdownButton_clicked()
 {
-    // Sends a shutdown signal to the Pi to turn it off.
-    this->communicationsClient->sendSetting("shutdown", 0);
-    /*NEEDS TESTED ON PI!!!*/
+    if (QMessageBox::question(this, "RPLD", "Are you sure you want to shut down the Raspberry Pi?") == QMessageBox::Yes) {
+        // Sends a shutdown signal to the Pi to turn it off.
+        this->communicationsClient->sendSetting("shutdown", 0);
+    }
 }
 
 void MainWindow::on_connectButton_clicked()
 {
-    // Try to connect to specified ip address
-    this->communicationsClient->connectToServer(this->ui->ipAddress->text());
+    if (this->connectionStatus == RPLDClient::DISCONNECTED) {
+        // Try to connect to specified ip address
+        this->communicationsClient->connectToServer(this->ui->ipAddress->text());
+    } else if (this->connectionStatus == RPLDClient::CONNECTED) {
+        this->communicationsClient->disconnectFromServer();
+    }
 }
 
 void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
 {
+
+
     if (status == RPLDClient::CONNECTED) {
         this->ui->statusLabel->setText("Connected");
         this->ui->statusLabel->setStyleSheet("color: rgb(0, 255, 0)");
         this->ui->ipAddress->setEnabled(false);
-        this->ui->connectButton->setEnabled(false);
+        //this->ui->connectButton->setEnabled(false);
+        this->ui->connectButton->setText("Disconnect");
         this->ui->uploadButton->setEnabled(true);
         this->ui->shutdownButton->setEnabled(true);
         this->ui->colorButton->setEnabled(true);
@@ -100,12 +110,20 @@ void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
         if (status == RPLDClient::CONNECTING) {
             this->ui->statusLabel->setText("Connecting..");
             this->ui->statusLabel->setStyleSheet("color: rgb(255, 170, 0)");
+            this->ui->connectButton->setEnabled(false);
+            this->ui->connectButton->setText("Disconnect");
         } else if (status == RPLDClient::DISCONNECTED) {
             this->ui->statusLabel->setText("Disconnected");
             this->ui->statusLabel->setStyleSheet("color: rgb(255, 0, 0)");
+            this->ui->connectButton->setEnabled(true);
+            this->ui->connectButton->setText("Connect");
+            if (this->connectionStatus != RPLDClient::DISCONNECTED) {
+                if (this->communicationsClient->errorString() != "") {
+                    QMessageBox::information(this, "RPLD", "Communication error: " + this->communicationsClient->errorString());
+                }
+            }
         }
         this->ui->ipAddress->setEnabled(true);
-        this->ui->connectButton->setEnabled(true);
         this->ui->uploadButton->setEnabled(false);
         this->ui->shutdownButton->setEnabled(false);
         this->ui->colorButton->setEnabled(false);
@@ -113,4 +131,6 @@ void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
         this->ui->textEdit->setEnabled(false);
         //this->displayConfigWidget->setEnabled(false);
     }
+
+    this->connectionStatus = status;
 }

@@ -33,6 +33,7 @@ private:
     //DisplayConfigWidget *displayConfigWidget;
     RPLDClient *communicationsClient;
     QColor textColor;
+    RPLDClient::ConnectionStatus connectionStatus;
 };
 
 #endif // MAINWINDOW_H
