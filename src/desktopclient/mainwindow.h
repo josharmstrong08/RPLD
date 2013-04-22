@@ -27,6 +27,7 @@ private slots:
     void on_connectButton_clicked();
 
     void connectionStatusChanged(RPLDClient::ConnectionStatus status);
+    void recievedSetting(QString settingName, QVariant settingValue);
 
 private:
     Ui::MainWindow *ui;

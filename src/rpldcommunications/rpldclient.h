@@ -32,15 +32,18 @@ signals:
      * @param status The new connection status.
      */
     void statusChanged(RPLDClient::ConnectionStatus status);
+    void recievedSetting(QString settingName, QVariant settingValue);
 
 private slots:
     void socketStatusChanged(QAbstractSocket::SocketState state);
+    void dataReady();
 
 private:
     /**
      * @brief The tcp socket that is being used.
      */
     QTcpSocket *tcpSocket;
+    quint16 messageSize;
     
 };
 

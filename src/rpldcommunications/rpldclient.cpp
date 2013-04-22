@@ -17,8 +17,10 @@
 RPLDClient::RPLDClient(QObject *parent) :
     QObject(parent)
 {
+    this->messageSize = 0;
     this->tcpSocket = new QTcpSocket(this);
     connect(this->tcpSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socketStatusChanged(QAbstractSocket::SocketState)));
+    connect(this->tcpSocket, SIGNAL(readyRead()), this, SLOT(dataReady()));
 }
 
 /**
@@ -68,7 +70,16 @@ void RPLDClient::sendSetting(QString settingName, QVariant value)
  */
 void RPLDClient::requestSetting(QString settingName)
 {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    QString messageType = "requestsetting";
+    out.setVersion(QDataStream::Qt_4_8);
+    out << (quint16)0;
+    out << messageType << settingName;
+    out.device()->seek(0);
+    out << (quint16)(block.size() - sizeof(quint16));
 
+    this->tcpSocket->write(block);
 }
 
 /**
@@ -86,7 +97,6 @@ const QString RPLDClient::errorString()
 }
 
 /**
-
  * @brief This private socket recives socket state changes from the tcp socket.
  * @param state The new socket state.
  */
@@ -105,5 +115,49 @@ void RPLDClient::socketStatusChanged(QAbstractSocket::SocketState state)
     case QAbstractSocket::ConnectingState:
     case QAbstractSocket::HostLookupState:
         emit this->statusChanged(RPLDClient::CONNECTING);
+    }
+}
+
+/**
+ * @brief This slot is triggered whenever this is new data to be read
+ *   on the tcp socket. It's main function is decode settings that have
+ *   been requested.
+ */
+void RPLDClient::dataReady()
+{
+    QDataStream in(this->tcpSocket);
+    in.setVersion(QDataStream::Qt_4_8);
+
+    // Keep looping as long as there is data to recieve.
+    while (in.atEnd() == false) {
+        // If the message size is not yet defined, it should be the next value to be
+        // sent.
+        if (this->messageSize == 0) {
+            // The message size itself could be coming across in several chunks, but
+            // we know it's size: unsigned 16 bit integer.
+            if (this->tcpSocket->bytesAvailable() < (int)sizeof(quint16)) {
+                return;
+            } else {
+                in >> this->messageSize;
+            }
+        }
+
+        // Now wait until the full message comes across
+        if (this->tcpSocket->bytesAvailable() < this->messageSize) {
+            return;
+        }
+
+        // At this point we have enough bytes to make a full message
+        QString settingName;
+        QString messageType;
+        QVariant value;
+        in >> messageType >> settingName >> value;
+
+        if (messageType == "returnsetting") {
+            emit this->recievedSetting(settingName, value);
+        } else  {
+            qDebug() << "Unknown messagetype " << messageType;
+        }
+        this->messageSize = 0;
     }
 }

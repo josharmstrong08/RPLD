@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVariant>
 #include "scrollingtextdisplay.h"
+#include "rpldserver.h"
 
 class Server : public QObject
 {
@@ -15,10 +16,12 @@ signals:
     
 private slots:
     void recievedSetting(QString settingName, QVariant value);
+    void settingRequested(QString settingName);
 
 private:
     ScrollingTextDisplay *display;
     LEDDriver *driver;
+    RPLDServer *rpldServer;
 };
 
 #endif // SERVER_H

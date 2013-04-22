@@ -68,8 +68,9 @@ Server::Server(QObject *parent) :
     display->moveToThread(displayThread);
 
     // Start listening for incoming settings
-    RPLDServer *rpldServer = new RPLDServer(this);
-    QObject::connect(rpldServer, SIGNAL(recievedSetting(QString,QVariant)), this, SLOT(recievedSetting(QString,QVariant)));
+    this->rpldServer = new RPLDServer(this);
+    QObject::connect(this->rpldServer, SIGNAL(recievedSetting(QString,QVariant)), this, SLOT(recievedSetting(QString,QVariant)));
+    QObject::connect(this->rpldServer, SIGNAL(settingRequested(QString)), this, SLOT(settingRequested(QString)));
 
     // Start the driver thread
     driverThread->start();
@@ -95,8 +96,8 @@ void Server::recievedSetting(QString settingName, QVariant value)
         unsigned char blue = string.section(',', 2, 2).toUInt();
         this->display->setColor(red, green, blue);
     } else if (settingName == "shutdown") {
+        // This program should be running as root
         system("halt");
-        /*NEEDS TESTED ON PI!!!*/
     } else if (settingName == "matrixcount") {
         int count = value.toInt();
 #ifndef USE_STD_OUT
@@ -110,5 +111,23 @@ void Server::recievedSetting(QString settingName, QVariant value)
 #endif
         this->display->setWidth(count * 32);
         this->display->setHeight(32);
+    }
+}
+
+/**
+ * @brief A setting value was requested by the client. Return it through the
+ *   communications library.
+ * @param settingName The name of the setting requested.
+ */
+void Server::settingRequested(QString settingName)
+{
+    if (settingName == "text") {
+        this->rpldServer->returnSettingValue("text", this->display->getText());
+    } else if (settingName == "speed") {
+        this->rpldServer->returnSettingValue("speed", this->display->getScrollingSpeed());
+    } else if (settingName == "color") {
+        //this->rpldServer->returnSettingValue("color", this->display->getc);
+    } else if (settingName == "matrixcount") {
+        //this->rpldServer->returnSettingValue(this->display->ge);
     }
 }

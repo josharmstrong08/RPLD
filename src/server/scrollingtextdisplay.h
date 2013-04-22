@@ -35,13 +35,15 @@ public slots:
     void stop();
     void setText(QString text);
     void setColor(unsigned char red, unsigned char green, unsigned char blue);
-    /**
-     * @brief Sets the scrolling speed.
-     * @param speed The speed in pixels per second.
-     */
     void setScrollingSpeed(int speed);
     void setWidth(unsigned long width);
     void setHeight(unsigned long height);
+    QString getText();
+    void getcolor(unsigned char &red, unsigned char &green, unsigned char &blue);
+    int getScrollingSpeed();
+    unsigned long getWidth();
+    unsigned long getHeight();
+
 
 signals:
     void updateFrame(uint8_t *frame, unsigned long width, unsigned long height);

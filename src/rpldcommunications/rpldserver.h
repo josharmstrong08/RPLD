@@ -17,8 +17,12 @@ private slots:
     void acceptConnection();
     void dataReady();
 
+public slots:
+    void returnSettingValue(QString settingName, QVariant value);
+
 signals:
     void recievedSetting(QString settingName, QVariant value);
+    void settingRequested(QString settingName);
 
 private:
   QTcpServer *server;

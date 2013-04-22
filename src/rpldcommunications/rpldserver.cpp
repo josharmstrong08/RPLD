@@ -10,6 +10,7 @@
 RPLDServer::RPLDServer(QObject *parent) :
     QObject(parent)
 {
+    this->messageSize = 0;
     this->server = new QTcpServer(this);
     connect(this->server, SIGNAL(newConnection()), this, SLOT(acceptConnection()));
     this->server->listen(QHostAddress::Any, 8888);
@@ -62,17 +63,49 @@ void RPLDServer::dataReady()
             return;
         }
 
-        // At this point we have enough bytes to make a full message
-        QString settingName;
+        // At this point we have enough bytes to recreate the full message
+        // Read the message type part of the message
         QString messageType;
-        QVariant value;
-        in >> messageType >> settingName >> value;
-        this->messageSize = 0;
+        in >> messageType;
 
         if (messageType == "setsetting") {
+            // Read the setting name and value
+            QVariant value;
+            QString settingName;
+            in >> settingName >> value;
             emit this->recievedSetting(settingName, value);
+            this->messageSize = 0;
+        } else if (messageType == "requestsetting") {
+            // Read the setting name and get it.
+            QString settingName;
+            in >> settingName;
+            emit this->settingRequested(settingName);
+            this->messageSize = 0;
         } else  {
             qDebug() << "Unknown messagetype " << messageType;
+            //char *dummy;
+            //in.readBytes(dummy, this->client->bytesAvailable);
+            this->messageSize = 0;
         }
     }
+}
+
+/**
+ * @brief This slot will send the given setting to a connected client. Usually it
+ *   is called because the settingRequested signal was emitted.
+ * @param settingName
+ * @param value
+ */
+void RPLDServer::returnSettingValue(QString settingName, QVariant value)
+{
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    QString messageType = "returnsetting";
+    out.setVersion(QDataStream::Qt_4_8);
+    out << (quint16)0;
+    out << messageType << settingName << value;
+    out.device()->seek(0);
+    out << (quint16)(block.size() - sizeof(quint16));
+
+    this->client->write(block);
 }

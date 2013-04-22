@@ -223,3 +223,28 @@ void ScrollingTextDisplay::setHeight(unsigned long height)
 {
     this->height = height;
 }
+
+QString ScrollingTextDisplay::getText()
+{
+    return this->text;
+}
+
+void ScrollingTextDisplay::getcolor(unsigned char &red, unsigned char &green, unsigned char &blue)
+{
+
+}
+
+int ScrollingTextDisplay::getScrollingSpeed()
+{
+    return this->scrollingSpeed;
+}
+
+unsigned long ScrollingTextDisplay::getWidth()
+{
+    return this->width;
+}
+
+unsigned long ScrollingTextDisplay::getHeight()
+{
+    return this->height;
+}

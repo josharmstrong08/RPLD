@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->communicationsClient = new RPLDClient(this);
     connect(this->communicationsClient, SIGNAL(statusChanged(RPLDClient::ConnectionStatus)), this, SLOT(connectionStatusChanged(RPLDClient::ConnectionStatus)));
+    QObject::connect(this->communicationsClient, SIGNAL(recievedSetting(QString,QVariant)), this, SLOT(recievedSetting(QString,QVariant)));
 }
 
 MainWindow::~MainWindow()
@@ -85,6 +86,7 @@ void MainWindow::on_connectButton_clicked()
     if (this->connectionStatus == RPLDClient::DISCONNECTED) {
         // Try to connect to specified ip address
         this->communicationsClient->connectToServer(this->ui->ipAddress->text());
+        // The connection status should now change
     } else if (this->connectionStatus == RPLDClient::CONNECTED) {
         this->communicationsClient->disconnectFromServer();
     }
@@ -92,8 +94,6 @@ void MainWindow::on_connectButton_clicked()
 
 void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
 {
-
-
     if (status == RPLDClient::CONNECTED) {
         this->ui->statusLabel->setText("Connected");
         this->ui->statusLabel->setStyleSheet("color: rgb(0, 255, 0)");
@@ -106,6 +106,8 @@ void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
         this->ui->scrollSpeedSlider->setEnabled(true);
         this->ui->textEdit->setEnabled(true);
         //this->displayConfigWidget->setEnabled(true);
+
+        this->communicationsClient->requestSetting("text");
     } else if (status == RPLDClient::DISCONNECTED || RPLDClient::CONNECTING){
         if (status == RPLDClient::CONNECTING) {
             this->ui->statusLabel->setText("Connecting..");
@@ -133,4 +135,23 @@ void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
     }
 
     this->connectionStatus = status;
+}
+
+void MainWindow::recievedSetting(QString settingName, QVariant settingValue)
+{
+    if (settingName == "text") {
+        this->ui->textEdit->setText(settingValue.toString());
+    } else if (settingName == "speed") {
+        this->ui->scrollSpeedSlider->setValue(settingValue.toInt());
+    } else if (settingName == "color") {
+        QString colorstring = settingValue.toString();
+        unsigned char red = colorstring.section(',', 0, 0).toUInt();
+        unsigned char green = colorstring.section(',', 1, 1).toUInt();
+        unsigned char blue = colorstring.section(',', 2, 2).toUInt();
+        this->textColor.setRgb(red, green, blue);
+        QString qss = QString("background-color: %1").arg(this->textColor.name());
+        this->ui->colorButton->setStyleSheet(qss);
+    } else if (settingName == "matrixcount") {
+        this->ui->matrixCountSpinner->setValue(settingValue.toInt());
+    }
 }
