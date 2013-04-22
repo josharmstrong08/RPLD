@@ -52,13 +52,23 @@ void RPLDClient::sendSetting(QString settingName, QVariant value)
 {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
+    QString messageType = "setsetting";
     out.setVersion(QDataStream::Qt_4_8);
     out << (quint16)0;
-    out << settingName << value;
+    out << messageType << settingName << value;
     out.device()->seek(0);
     out << (quint16)(block.size() - sizeof(quint16));
 
     this->tcpSocket->write(block);
+}
+
+/**
+ * @brief Requests the current value of a setting.
+ * @param settingName
+ */
+void RPLDClient::requestSetting(QString settingName)
+{
+
 }
 
 /**

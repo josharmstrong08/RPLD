@@ -21,6 +21,7 @@ public:
     void connectToServer(QString address);
     void disconnectFromServer();
     void sendSetting(QString settingName, QVariant value);
+    void requestSetting(QString settingName);
     const QString errorString();
 
 signals:

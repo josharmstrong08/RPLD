@@ -64,10 +64,15 @@ void RPLDServer::dataReady()
 
         // At this point we have enough bytes to make a full message
         QString settingName;
+        QString messageType;
         QVariant value;
-        in >> settingName >> value;
+        in >> messageType >> settingName >> value;
         this->messageSize = 0;
 
-        emit this->recievedSetting(settingName, value);
+        if (messageType == "setsetting") {
+            emit this->recievedSetting(settingName, value);
+        } else  {
+            qDebug() << "Unknown messagetype " << messageType;
+        }
     }
 }
