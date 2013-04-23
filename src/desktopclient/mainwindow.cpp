@@ -108,6 +108,9 @@ void MainWindow::connectionStatusChanged(RPLDClient::ConnectionStatus status)
         //this->displayConfigWidget->setEnabled(true);
 
         this->communicationsClient->requestSetting("text");
+        this->communicationsClient->requestSetting("speed");
+        this->communicationsClient->requestSetting("color");
+        this->communicationsClient->requestSetting("matrixcount");
     } else if (status == RPLDClient::DISCONNECTED || RPLDClient::CONNECTING){
         if (status == RPLDClient::CONNECTING) {
             this->ui->statusLabel->setText("Connecting..");

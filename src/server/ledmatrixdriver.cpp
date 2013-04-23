@@ -215,3 +215,13 @@ void LEDMatrixDriver::SetMatrixConfig(int **config, unsigned int width, unsigned
         free(config[y]);
     }
 }
+
+void LEDMatrixDriver::GetMatrixConfig(int *** /*config*/, unsigned int */*width*/, unsigned int */*height*/)
+{
+    throw "GetMatrixConfig is not yet implemented. See GetMatrixCount";
+}
+
+int LEDMatrixDriver::GetMatrixCount()
+{
+    return this->matrixCount;
+}

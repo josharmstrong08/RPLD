@@ -126,8 +126,16 @@ void Server::settingRequested(QString settingName)
     } else if (settingName == "speed") {
         this->rpldServer->returnSettingValue("speed", this->display->getScrollingSpeed());
     } else if (settingName == "color") {
-        //this->rpldServer->returnSettingValue("color", this->display->getc);
+        unsigned char red, green, blue;
+        this->display->getColor(red, green, blue);
+        QString colorString = QString::number(red) + "," + QString::number(green) + "," + QString::number(blue);
+        this->rpldServer->returnSettingValue("color", colorString);
     } else if (settingName == "matrixcount") {
-        //this->rpldServer->returnSettingValue(this->display->ge);
+#ifdef USE_STD_OUT
+        this->rpldServer->returnSettingValue("matrixcount", 1);
+#else
+        LEDMatrixDriver *leddriver = static_cast<LEDMatrixDriver>(this->driver);
+        this->rpldServer->returnSettingValue("matrixcount", leddriver->GetMatrixCount);
+#endif
     }
 }

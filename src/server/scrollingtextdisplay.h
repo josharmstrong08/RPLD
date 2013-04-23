@@ -39,7 +39,7 @@ public slots:
     void setWidth(unsigned long width);
     void setHeight(unsigned long height);
     QString getText();
-    void getcolor(unsigned char &red, unsigned char &green, unsigned char &blue);
+    void getColor(unsigned char &red, unsigned char &green, unsigned char &blue);
     int getScrollingSpeed();
     unsigned long getWidth();
     unsigned long getHeight();

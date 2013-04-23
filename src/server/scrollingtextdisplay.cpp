@@ -229,9 +229,11 @@ QString ScrollingTextDisplay::getText()
     return this->text;
 }
 
-void ScrollingTextDisplay::getcolor(unsigned char &red, unsigned char &green, unsigned char &blue)
+void ScrollingTextDisplay::getColor(unsigned char &red, unsigned char &green, unsigned char &blue)
 {
-
+    red = this->colorRed;
+    green = this->colorGreen;
+    blue = this->colorBlue;
 }
 
 int ScrollingTextDisplay::getScrollingSpeed()

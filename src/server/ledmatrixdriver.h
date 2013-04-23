@@ -20,6 +20,8 @@ class LEDMatrixDriver : public LEDDriver
 public:
     explicit LEDMatrixDriver(QObject *parent = 0);
     void SetMatrixConfig(int **config, unsigned int width, unsigned int height);
+    void GetMatrixConfig(int ***config, unsigned int *width, unsigned int *height);
+    int GetMatrixCount();
 
 public slots:
     int outputFrame(uint8_t *frame, unsigned long width, unsigned long height);
