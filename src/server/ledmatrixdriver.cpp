@@ -97,8 +97,7 @@ int LEDMatrixDriver::outputFrame(uint8_t *frame, unsigned long width, unsigned l
         throw "Frame size does not match matrix configuration.";
     }
 
-    this->nextbuffer = frame;
-    //this->matrixCount = width / 32;
+    this->buffer = frame;
 
     return 0;
 }
@@ -164,9 +163,9 @@ void LEDMatrixDriver::output()
     // Increment row
     this->currentRow++;
     if (this->currentRow == 16) {
-        uint8_t *temp = this->buffer;
-        this->buffer = this->nextbuffer;
-        this->nextbuffer = temp;
+        //uint8_t *temp = this->buffer;
+        //this->buffer = this->nextbuffer;
+        //this->nextbuffer = temp;
         this->currentRow = 0;
     }
 
