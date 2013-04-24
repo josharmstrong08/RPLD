@@ -25,7 +25,7 @@
 #define G2      10
 #define B2      3
 
-#define CALC_BUFFER_OFFSET(X,Y,width) ((((Y) * (width)) * 3) + ((X) * 3))
+#define CALC_BUFFER_OFFSET(X,Y,WIDTH) ((((Y) * (WIDTH)) * 3) + ((X) * 3))
 
 /**
  * @brief LEDMatrixDriver::LEDMatrixDriver
@@ -91,9 +91,11 @@ LEDMatrixDriver::LEDMatrixDriver(QObject *parent) :
 int LEDMatrixDriver::outputFrame(uint8_t *frame, unsigned long width, unsigned long height)
 {
     if (height != 32 || width % 32 != 0) {
+        qDebug() << "only horizontals";
         throw "Only horizontal configurations are supported.";
     }
     if (width != (unsigned long)this->matrixCount * 32) {
+        qDebug() << "frame size does not match";
         throw "Frame size does not match matrix configuration.";
     }
 
@@ -213,6 +215,13 @@ void LEDMatrixDriver::SetMatrixConfig(int **config, unsigned int width, unsigned
     for (unsigned long y = 0; y < height; y++) {
         free(config[y]);
     }
+}
+
+void LEDMatrixDriver::SetMatrixCount(int count)
+{
+    qDebug() << "Setting new matrix count: " << count;
+    this->buffer = new uint8_t(32 * count * 3);
+    this->matrixCount = count;
 }
 
 void LEDMatrixDriver::GetMatrixConfig(int *** /*config*/, unsigned int */*width*/, unsigned int */*height*/)

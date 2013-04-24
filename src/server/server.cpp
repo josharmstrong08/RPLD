@@ -101,13 +101,16 @@ void Server::recievedSetting(QString settingName, QVariant value)
     } else if (settingName == "matrixcount") {
         int count = value.toInt();
 #ifndef USE_STD_OUT
+/*
         int **matrixconfig = (int**)malloc(sizeof(int*));
         *matrixconfig = (int*)malloc(sizeof(int) * count);
         for (int i = 0; i < count; i++) {
             matrixconfig[0][i] = i;
         }
+*/
         LEDMatrixDriver *matrixdriver = static_cast<LEDMatrixDriver*>(this->driver);
-        matrixdriver->SetMatrixConfig(matrixconfig, count, 1);
+        //matrixdriver->SetMatrixConfig(matrixconfig, count, 1);
+        matrixdriver->SetMatrixCount(count);
 #endif
         this->display->setWidth(count * 32);
         this->display->setHeight(32);
@@ -134,8 +137,8 @@ void Server::settingRequested(QString settingName)
 #ifdef USE_STD_OUT
         this->rpldServer->returnSettingValue("matrixcount", 1);
 #else
-        LEDMatrixDriver *leddriver = static_cast<LEDMatrixDriver>(this->driver);
-        this->rpldServer->returnSettingValue("matrixcount", leddriver->GetMatrixCount);
+        LEDMatrixDriver *leddriver = static_cast<LEDMatrixDriver*>(this->driver);
+        this->rpldServer->returnSettingValue("matrixcount", leddriver->GetMatrixCount());
 #endif
     }
 }

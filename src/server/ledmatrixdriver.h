@@ -22,6 +22,7 @@ public:
     void SetMatrixConfig(int **config, unsigned int width, unsigned int height);
     void GetMatrixConfig(int ***config, unsigned int *width, unsigned int *height);
     int GetMatrixCount();
+    void SetMatrixCount(int count);
 
 public slots:
     int outputFrame(uint8_t *frame, unsigned long width, unsigned long height);

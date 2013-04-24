@@ -28,7 +28,7 @@ ScrollingTextDisplay::ScrollingTextDisplay(unsigned long width, unsigned long he
     this->width = width;
     this->height = height;
     this->buffer = new uint8_t [width * height * 3]();
-    this->currentOffset = 0;
+    this->currentOffset = this->width;
     this->maxOffset = this->width;
     this->text = "";
     this->scrollingSpeed = 0;
@@ -74,7 +74,7 @@ void ScrollingTextDisplay::update()
     // TODO Adjust with scrolling speed here
     this->currentOffset -= 33 / 1000.0 * (double)this->scrollingSpeed;
     if (this->currentOffset <= this->maxOffset) {
-        this->currentOffset = 0;
+        this->currentOffset = this->width;
     }
 
     // Create the next frame for next update -----------------------------
@@ -217,11 +217,13 @@ void ScrollingTextDisplay::setScrollingSpeed(int speed)
 void ScrollingTextDisplay::setWidth(unsigned long width) 
 {
     this->width = width;
+    this->buffer = new uint8_t [width * height * 3]();
 }
 
 void ScrollingTextDisplay::setHeight(unsigned long height)
 {
     this->height = height;
+    this->buffer = new uint8_t [width * height * 3]();
 }
 
 QString ScrollingTextDisplay::getText()
