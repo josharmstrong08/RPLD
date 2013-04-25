@@ -19,8 +19,6 @@ class LEDMatrixDriver : public LEDDriver
     Q_OBJECT
 public:
     explicit LEDMatrixDriver(QObject *parent = 0);
-    void SetMatrixConfig(int **config, unsigned int width, unsigned int height);
-    void GetMatrixConfig(int ***config, unsigned int *width, unsigned int *height);
     int GetMatrixCount();
     void SetMatrixCount(int count);
 
