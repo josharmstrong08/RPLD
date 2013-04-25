@@ -7,7 +7,8 @@
 #include <cstdio>
 #include <QDebug>
 #include <QAbstractSlider>
-
+#include <QDesktopServices>
+#include <QUrl>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -50,7 +51,9 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionContents_triggered()
 {
-    QMessageBox::information(this, "Raspberry Pi LED Display", "Help is not yet implemented");
+    //Opens the web page to the RPLD Document Archive on the senior design webpage.
+    //QMessageBox::information(this, "Raspberry Pi LED Display", "Help is not yet implemented");
+      QDesktopServices::openUrl(QUrl("http://seniordesign.engr.uidaho.edu/2012-2013/raspberry_pi/documentarchive.html", QUrl::TolerantMode));
 }
 
 void MainWindow::on_colorButton_clicked()

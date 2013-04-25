@@ -4,6 +4,7 @@
 #include "rpldclient.h"
 //#include "displayconfigwidget.h"
 #include <QMainWindow>
+#include <QDesktopServices>
 
 namespace Ui {
 class MainWindow;
