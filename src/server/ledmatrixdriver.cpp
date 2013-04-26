@@ -178,55 +178,11 @@ void LEDMatrixDriver::output()
 #endif
 }
 
-/**
- * @brief LEDMatrixDriver::SetMatrixConfig
- * @param config This is a two dimensional array of LED matrix indices. Each integer corresponds
- *        to the index of LED matrix in the chain of LED matrices, starting with zero. The
- *        innermost array is the columns and the outermost array is the rows. If a LED matrix is
- *        not present in a spot in the two dimensional array, then a -1 is used. For example, a
- *        horizontal line of four LED matrices could be displayed as:
- *          @code{.cpp} int config[4][1] = {{0}, {1}, {2}, {3}}; @endcode
- *        A vertical line of four LED matrices could be displayed as:
- *          @code{.cpp} int config[1][4] = {{0, 1, 2, 3}} @endcode
- *        And a diagonal line as:
- *          @code{.cpp} int config[4][4] = {{0,-1,-1,1},{-1,1,-1,-1},{-1,-1,2,-1},{-1,-1,-1,3}} @endcode
- *        This function will free the memory in config by calling the free() function.
- * 
- *        Currently this function only handles straight horizontal configurations.
- * @param width   The maximum width, in number of matrices.
- * @param height  The maximum height, in number of matrices. 
- */
-void LEDMatrixDriver::SetMatrixConfig(int **config, unsigned int width, unsigned int height)
-{
-    if (height != 1) {
-        throw "Matrices must all be in a horizontal row.";
-    }
-
-    for (unsigned long y = 0; y < height; y++) {
-        for (unsigned long x = 0; x < width; x++) {
-            qDebug() << "Config (" << x << "," << y << "): " << config[y][x];
-        }
-    }
-  
-    // Record the number of matrices
-    this->matrixCount = width;    
-
-    // Free the memory used by config
-    for (unsigned long y = 0; y < height; y++) {
-        free(config[y]);
-    }
-}
-
 void LEDMatrixDriver::SetMatrixCount(int count)
 {
     qDebug() << "Setting new matrix count: " << count;
     this->buffer = new uint8_t(32 * count * 3);
     this->matrixCount = count;
-}
-
-void LEDMatrixDriver::GetMatrixConfig(int *** /*config*/, unsigned int */*width*/, unsigned int */*height*/)
-{
-    throw "GetMatrixConfig is not yet implemented. See GetMatrixCount";
 }
 
 int LEDMatrixDriver::GetMatrixCount()

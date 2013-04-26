@@ -23,14 +23,16 @@ SOURCES += main.cpp \
     ledtestdriver.cpp \
     font.cpp \
     server.cpp \
-    leddriver.cpp
+    leddriver.cpp \
+    framebuffer.cpp
 
 HEADERS += \
     leddriver.h \
     ledmatrixdriver.h \
     scrollingtextdisplay.h \
     ledtestdriver.h \
-    server.h
+    server.h \
+    framebuffer.h
 
 QMAKE_CXXFLAGS += -std=c++0x
 
