@@ -28,7 +28,7 @@ ScrollingTextDisplay::ScrollingTextDisplay(unsigned long width, unsigned long he
     this->width = width;
     this->height = height;
     this->buffer = new uint8_t [width * height * 3]();
-    this->currentOffset = this->width;
+    this->currentOffset = 0;
     this->maxOffset = this->width;
     this->text = "";
     this->scrollingSpeed = 0;
@@ -71,7 +71,8 @@ void ScrollingTextDisplay::update()
     emit updateFrame(this->buffer, this->width, this->height);
 
     // Scroll ------------------------------------------------------------
-    // TODO Adjust with scrolling speed here
+    // Calculate the current offset based on scrolling speed which is set
+    // in pixels per second.
     this->currentOffset -= 33 / 1000.0 * (double)this->scrollingSpeed;
     if (this->currentOffset <= this->maxOffset) {
         this->currentOffset = this->width;
@@ -87,7 +88,9 @@ void ScrollingTextDisplay::update()
     int tempOffset = this->currentOffset;
     for (int i = 0; i < this->text.length(); i++) {
         int bitmapWidth = this->fontInfo.charInfo[this->text[i].toLatin1() - this->fontInfo.startChar].widthBits;
-        this->writeCharacter(this->text[i], tempOffset);
+        if (tempOffset > -this->width && tempOffset < this->width) {
+          this->writeCharacter(this->text[i], tempOffset);
+        }
         tempOffset += bitmapWidth + 5;
     }
 }
@@ -189,7 +192,11 @@ void ScrollingTextDisplay::setText(QString text)
     for (int i = 0; i < text.length(); i++) {
         this->maxOffset -= this->fontInfo.charInfo[text[i].toLatin1() - this->fontInfo.startChar].widthBits + 5;
     }
-    this->currentOffset = 0;
+    if (this->scrollingSpeed == 0) {
+      this->currentOffset = 0;
+    } else {
+      this->currentOffset = this->width;
+    }
 }
 
 /**
@@ -212,6 +219,9 @@ void ScrollingTextDisplay::setColor(unsigned char red, unsigned char green, unsi
 void ScrollingTextDisplay::setScrollingSpeed(int speed)
 {
     this->scrollingSpeed = speed;
+    if (this->scrollingSpeed == 0) {
+      this->currentOffset = 0;
+    }
 }
 
 void ScrollingTextDisplay::setWidth(unsigned long width) 
