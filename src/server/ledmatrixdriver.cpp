@@ -70,7 +70,7 @@ LEDMatrixDriver::LEDMatrixDriver(QObject *parent) :
 #endif
 
     this->matrixCount = 1;
-    this->buffer = new uint8_t(32 * 1 * 3);
+    this->buffer = new uint8_t[32 * 32 * 1 * 3]();
     this->nextbuffer = this->buffer;
     this->timer = new QTimer(this);
     connect(this->timer, SIGNAL(timeout()), this, SLOT(output()));
@@ -99,7 +99,7 @@ int LEDMatrixDriver::outputFrame(uint8_t *frame, unsigned long width, unsigned l
         throw "Frame size does not match matrix configuration.";
     }
 
-    this->buffer = frame;
+    memcpy(this->nextbuffer, frame, sizeof(uint8_t) * width * height * 3);
 
     return 0;
 }
@@ -165,9 +165,10 @@ void LEDMatrixDriver::output()
     // Increment row
     this->currentRow++;
     if (this->currentRow == 16) {
-        //uint8_t *temp = this->buffer;
-        //this->buffer = this->nextbuffer;
-        //this->nextbuffer = temp;
+        uint8_t *temp = this->buffer;
+        this->buffer = this->nextbuffer;
+        this->nextbuffer = temp;
+
         this->currentRow = 0;
     }
 
@@ -181,7 +182,7 @@ void LEDMatrixDriver::output()
 void LEDMatrixDriver::SetMatrixCount(int count)
 {
     qDebug() << "Setting new matrix count: " << count;
-    this->buffer = new uint8_t(32 * count * 3);
+    this->buffer = new uint8_t[32 * 32 * count * 3]();
     this->matrixCount = count;
 }
 

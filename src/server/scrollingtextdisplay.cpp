@@ -88,7 +88,7 @@ void ScrollingTextDisplay::update()
     int tempOffset = this->currentOffset;
     for (int i = 0; i < this->text.length(); i++) {
         int bitmapWidth = this->fontInfo.charInfo[this->text[i].toLatin1() - this->fontInfo.startChar].widthBits;
-        if (tempOffset > -this->width && tempOffset < this->width) {
+        if ((tempOffset > -bitmapWidth) && (tempOffset < (signed long)this->width)) {
           this->writeCharacter(this->text[i], tempOffset);
         }
         tempOffset += bitmapWidth + 5;
