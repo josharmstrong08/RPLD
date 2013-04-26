@@ -71,7 +71,8 @@ void MainWindow::on_uploadButton_clicked()
     // This will upload the contents to the server
     this->communicationsClient->sendSetting("text", this->ui->textEdit->text());
     this->communicationsClient->sendSetting("speed", this->ui->scrollSpeedSlider->value());
-    QString colorString = QString::number(this->textColor.red()) + "," + QString::number(this->textColor.green()) + "," + QString::number(this->textColor.blue());
+    QString colorString = QString::number(this->textColor.red()) + "," + QString::number(this->textColor.blue()) + "," + QString::number(this->textColor.green());
+    //QString colorString = QString::number(this->textColor.red()) + "," + QString::number(this->textColor.green()) + "," + QString::number(this->textColor.blue());
     this->communicationsClient->sendSetting("color", colorString);
     this->communicationsClient->sendSetting("matrixcount", this->ui->matrixCountSpinner->value());
 }

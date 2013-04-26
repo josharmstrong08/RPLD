@@ -172,7 +172,7 @@ void LEDMatrixDriver::output()
         this->currentRow = 0;
     }
 
-    // latch
+    // latchKTEC For The Win!!
     digitalWrite(LAT, HIGH);
     //digitalWrite(LAT, LOW);
     digitalWrite(OE, LOW);
