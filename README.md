@@ -8,6 +8,9 @@ Raspberry Pi. The product that we created was RPLD, a remotely controllable scro
 software is open source, and the hardware is all freely available online, so you can use this software
 to create your own scrolling text marquee. 
 
+To see how the marquee looked at senior design expo, watch this clip: 
+[http://www.youtube.com/watch?v=XAqsqe4I2hM](http://www.youtube.com/watch?v=XAqsqe4I2hM)
+
 Installation
 ============
 
